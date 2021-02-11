@@ -2,13 +2,11 @@
 
 ## Project Goals
 
-## Approach
-
-# Tools/ APIs/ Frameworks
+## Tools/ APIs/ Frameworks
 - tools
 - more tools
 
-# Description of Experience
+## Description of Experience
 1. blabal
 2. blablala
 
