@@ -1,4 +1,4 @@
-# TERM: A Telemedicine app for nurses seeking to empower rural moms. 
+# _A Telemedicine app for nurses seeking to empower rural moms._
 
 ## Project Goals
 
@@ -11,6 +11,7 @@
 2. blablala
 
 ## Team Members
+- Blake Pennington  _Email_: blakepennington97@gmail.com
 
 # ALL BELOW USED FOR REFERENCE, DELETE BEFORE WEBSITE TURN IN
 
