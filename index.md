@@ -1,10 +1,26 @@
-## THIS IS A TEST HAHHHHHHHHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+### TERM: A Telemedicine app for nurses seeking to empower rural moms. 
+
+### Project Goals
+
+### Approach
+
+## Tools/ APIs/ Frameworks
+- tools
+- more tools
+
+## Description of Experience
+1. blabal
+2. blablala
+
+## Team Members
+
+### ALL BELOW USED FOR REFERENCE, DELETE BEFORE WEBSITE TURN IN
 
 You can use the [editor on GitHub](https://github.com/blakepennington97/TERM/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+## Markdown
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
