@@ -3,8 +3,12 @@
 ## Project Goals
 
 ## Tools/ APIs/ Frameworks
-- tools
-- more tools
+- Visual Studio Code
+- Flutter
+- Android Studio Emulator
+- Android SDK
+- Dart
+- Linux VM (optional)
 
 ## Description of Experience
 1. blabal
