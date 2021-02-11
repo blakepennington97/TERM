@@ -1,20 +1,20 @@
-### TERM: A Telemedicine app for nurses seeking to empower rural moms. 
+# TERM: A Telemedicine app for nurses seeking to empower rural moms. 
 
-### Project Goals
+## Project Goals
 
-### Approach
+## Approach
 
-## Tools/ APIs/ Frameworks
+# Tools/ APIs/ Frameworks
 - tools
 - more tools
 
-## Description of Experience
+# Description of Experience
 1. blabal
 2. blablala
 
 ## Team Members
 
-### ALL BELOW USED FOR REFERENCE, DELETE BEFORE WEBSITE TURN IN
+# ALL BELOW USED FOR REFERENCE, DELETE BEFORE WEBSITE TURN IN
 
 You can use the [editor on GitHub](https://github.com/blakepennington97/TERM/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
