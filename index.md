@@ -16,7 +16,7 @@
 
 ## Team Members
 - Blake Pennington        
-  - **Email**: blakepennington97@gmail.com
+  - Email: blakepennington97@gmail.com
 
 # ALL BELOW USED FOR REFERENCE, DELETE BEFORE WEBSITE TURN IN
 
