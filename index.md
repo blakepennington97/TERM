@@ -1,6 +1,9 @@
 # _A Telemedicine app for nurses seeking to empower rural moms._
 
 ## Project Goals
+- Create an easy to use, simple to understand application for mothers
+- Facilitate instant communication between mothers and their healthcare providers
+- Provide accurate, trustworthy information about pregnancy to mothers
 
 ## Tools/ APIs/ Frameworks
 - Visual Studio Code
