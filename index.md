@@ -27,6 +27,9 @@
   - Email: blakepennington97@gmail.com
 - William Tosh
   - Email: wstosh@crimson.ua.edu
+- Kyatt Spessert
+  - Email: kspessert@gmail.com
+  - Crimson Email: kgspessert@crimson.ua.edu
 
 # ALL BELOW USED FOR REFERENCE, DELETE BEFORE WEBSITE TURN IN
 
