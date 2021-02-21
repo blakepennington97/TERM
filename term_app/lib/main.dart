@@ -43,7 +43,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _children = [
-    Progress(Colors.green),
+    Progress(),
     Email(Colors.white),
     Profile(Colors.black)
   ];
@@ -59,6 +59,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('TERM'),
+        backgroundColor: Colors.deepPurple,
       ),
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
