@@ -87,8 +87,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 */
 
 import 'package:flutter/material.dart';
-
-// import 'signup.dart';
+import 'signup.dart';
 
 void main() => runApp(new SignIn());
 
@@ -97,9 +96,9 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      // routes: <String, WidgetBuilder>{
-        // '/signup': (BuildContext context) => new SignupPage()
-     //  },
+      routes: <String, WidgetBuilder>{
+        '/signup': (BuildContext context) => new SignupPage()
+       },
       home: new SignInPage(),
     );
   }
@@ -122,10 +121,10 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(90.0, 140.0, 0.0, 0.0),
+                    padding: EdgeInsets.fromLTRB(65.0, 140.0, 0.0, 0.0),
                     child: Text('TERM',
                         style: TextStyle(
-                            fontSize: 80.0,
+                            fontSize: 100.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.red))),
                 ],
@@ -223,4 +222,4 @@ class _SignInState extends State<SignInPage> {
   }
 }
 
-Code cited: https://github.com/rajayogan/flutter-minimalloginUI/blob/master/lib/main.dart
+// code cited: https://github.com/rajayogan/flutter-minimalloginUI/blob/master/lib/main.dart
