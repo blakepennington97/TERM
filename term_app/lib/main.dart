@@ -11,10 +11,10 @@
 
 // import 'package:flutter/material.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:term_app/home.dart';
 import 'signup.dart';
+import 'globals.dart' as globals;
 
 // void main() => runApp(MyApp());
 
@@ -31,9 +31,6 @@ import 'signup.dart';
 //   }
 // }
 
-
-
-
 void main() => runApp(new SignIn());
 
 class SignIn extends StatelessWidget {
@@ -44,7 +41,7 @@ class SignIn extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/signup': (BuildContext context) => new SignupPage(),
         '/home': (BuildContext context) => new MyStatefulWidget()
-       },
+      },
       home: new SignInPage(),
     );
   }
@@ -56,10 +53,16 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInState extends State<SignInPage> {
+  TextEditingController userEmail = new TextEditingController();
+  TextEditingController userPassword = new TextEditingController();
+
+  bool valEmail = false;
+  bool valPassword = false;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -67,12 +70,12 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(65.0, 140.0, 0.0, 0.0),
-                    child: Text('TERM',
-                        style: TextStyle(
-                            fontSize: 100.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red))),
+                      padding: EdgeInsets.fromLTRB(65.0, 140.0, 0.0, 0.0),
+                      child: Text('TERM',
+                          style: TextStyle(
+                              fontSize: 100.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red))),
                 ],
               ),
             ),
@@ -81,8 +84,10 @@ class _SignInState extends State<SignInPage> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      controller: userEmail,
                       decoration: InputDecoration(
                           labelText: 'EMAIL',
+                          errorText: valEmail ? 'Email not found' : null,
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
@@ -92,8 +97,10 @@ class _SignInState extends State<SignInPage> {
                     ),
                     SizedBox(height: 20.0),
                     TextField(
+                      controller: userPassword,
                       decoration: InputDecoration(
                           labelText: 'PASSWORD',
+                          errorText: valPassword ? 'Wrong password' : null,
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
@@ -127,10 +134,23 @@ class _SignInState extends State<SignInPage> {
                         elevation: 7.0,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushNamed('/home');
+                            setState(() {
+                              (userEmail.text == globals.uEmail)
+                                  ? valEmail = false
+                                  : valEmail = true;
+                              ((userEmail.text == globals.uEmail) &&
+                                      (userPassword.text != globals.uPassword))
+                                  ? valPassword = true
+                                  : valPassword = false;
+                            });
+                            if ((userEmail.text == globals.uEmail) &&
+                                (userPassword.text == globals.uPassword)) {
+                              Navigator.of(context).pushNamed('/home');
+                            }
                           },
                           child: Center(
-                            child: Text('LOGIN',
+                            child: Text(
+                              'LOGIN',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -152,10 +172,11 @@ class _SignInState extends State<SignInPage> {
                 elevation: 7.0,
                 child: GestureDetector(
                   onTap: () {
-                  Navigator.of(context).pushNamed('/signup');
+                    Navigator.of(context).pushNamed('/signup');
                   },
                   child: Center(
-                    child: Text('CREATE PROFILE',
+                    child: Text(
+                      'CREATE PROFILE',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -165,7 +186,7 @@ class _SignInState extends State<SignInPage> {
                 ),
               ),
             ),
-           ],
+          ],
         ));
   }
 }
