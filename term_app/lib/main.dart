@@ -165,6 +165,7 @@ class _SignInState extends State<SignInPage> {
             SizedBox(height: 20.0),
             Container(
               height: 40.0,
+              padding: EdgeInsets.only(right: 19.0, left: 19.0),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
                 shadowColor: Colors.grey,
