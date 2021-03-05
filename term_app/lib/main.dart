@@ -1,5 +1,4 @@
-/* /// Flutter code sample for BottomNavigationBar
-
+/// Flutter code sample for BottomNavigationBar
 // This example shows a [BottomNavigationBar] as it is used within a [Scaffold]
 // widget. The [BottomNavigationBar] has three [BottomNavigationBarItem]
 // widgets and the [currentIndex] is set to index 0. The selected item is
@@ -9,85 +8,27 @@
 // ![A scaffold with a bottom navigation bar containing three bottom navigation
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
-import 'package:flutter/material.dart';
-import 'progress.dart';
-import 'email.dart';
-import 'profile.dart';
-
-void main() => runApp(MyApp());
-
-/// This is the main application widget.
-class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
-    );
-  }
-}
-
-/// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
-
-  @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
-}
-
-/// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _children = [
-    Progress(Colors.green),
-    Email(Colors.white),
-    Profile(Colors.black)
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('TERM'),
-      ),
-      body: _children[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.deepPurple,
-        unselectedItemColor: Colors.white54,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics_outlined),
-            label: 'Progess',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.messenger),
-            label: 'Email',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-}
-*/
+// import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
+import 'package:term_app/home.dart';
 import 'signup.dart';
+import 'globals.dart' as globals;
+
+// void main() => runApp(MyApp());
+
+// /// This is the main application widget.
+// class MyApp extends StatelessWidget {
+//   static const String _title = 'Flutter Code Sample';
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: _title,
+//       home: MyStatefulWidget(),
+//     );
+//   }
+// }
 
 void main() => runApp(new SignIn());
 
@@ -97,8 +38,9 @@ class SignIn extends StatelessWidget {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/signup': (BuildContext context) => new SignupPage()
-       },
+        '/signup': (BuildContext context) => new SignupPage(),
+        '/home': (BuildContext context) => new MyStatefulWidget()
+      },
       home: new SignInPage(),
     );
   }
@@ -110,10 +52,16 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInState extends State<SignInPage> {
+  TextEditingController userEmail = new TextEditingController();
+  TextEditingController userPassword = new TextEditingController();
+
+  bool valEmail = false;
+  bool valPassword = false;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -121,12 +69,10 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(65.0, 140.0, 0.0, 0.0),
-                    child: Text('TERM',
-                        style: TextStyle(
-                            fontSize: 100.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red))),
+                      padding: EdgeInsets.fromLTRB(5.0, 140.0, 5.0, 0.0),
+                      child: Image(
+                          image: AssetImage('assets/term.png'),
+                      ))
                 ],
               ),
             ),
@@ -135,25 +81,29 @@ class _SignInState extends State<SignInPage> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      controller: userEmail,
                       decoration: InputDecoration(
                           labelText: 'EMAIL',
+                          errorText: valEmail ? 'Email not found' : null,
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey),
+                              color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red))),
+                              borderSide: BorderSide(color: Colors.red[900]))),
                     ),
                     SizedBox(height: 20.0),
                     TextField(
+                      controller: userPassword,
                       decoration: InputDecoration(
                           labelText: 'PASSWORD',
+                          errorText: valPassword ? 'Wrong password' : null,
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey),
+                              color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red))),
+                              borderSide: BorderSide(color: Colors.red[900]))),
                       obscureText: true,
                     ),
                     SizedBox(height: 35.0),
@@ -164,7 +114,7 @@ class _SignInState extends State<SignInPage> {
                         child: Text(
                           'Forgot Password',
                           style: TextStyle(
-                              color: Colors.grey,
+                              color: Colors.grey[800],
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Montserrat',
                               decoration: TextDecoration.underline),
@@ -176,13 +126,28 @@ class _SignInState extends State<SignInPage> {
                       height: 40.0,
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
-                        shadowColor: Colors.grey,
-                        color: Colors.red,
+                        shadowColor: Colors.grey[800],
+                        color: Colors.red[900],
                         elevation: 7.0,
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              (userEmail.text == globals.uEmail)
+                                  ? valEmail = false
+                                  : valEmail = true;
+                              ((userEmail.text == globals.uEmail) &&
+                                  (userPassword.text != globals.uPassword))
+                                  ? valPassword = true
+                                  : valPassword = false;
+                            });
+                            if ((userEmail.text == globals.uEmail) &&
+                                (userPassword.text == globals.uPassword)) {
+                              Navigator.of(context).pushNamed('/home');
+                            }
+                          },
                           child: Center(
-                            child: Text('LOGIN',
+                            child: Text(
+                              'LOGIN',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -197,17 +162,19 @@ class _SignInState extends State<SignInPage> {
             SizedBox(height: 20.0),
             Container(
               height: 40.0,
+              padding: EdgeInsets.only(right: 19.0, left: 19.0),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Colors.grey,
-                color: Colors.red,
+                shadowColor: Colors.grey[800],
+                color: Colors.red[900],
                 elevation: 7.0,
                 child: GestureDetector(
                   onTap: () {
-                  Navigator.of(context).pushNamed('/signup');
+                    Navigator.of(context).pushNamed('/signup');
                   },
                   child: Center(
-                    child: Text('CREATE PROFILE',
+                    child: Text(
+                      'CREATE PROFILE',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -217,7 +184,7 @@ class _SignInState extends State<SignInPage> {
                 ),
               ),
             ),
-           ],
+          ],
         ));
   }
 }
