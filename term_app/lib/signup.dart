@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'globals.dart' as globals;
 
 class SignupPage extends StatefulWidget {
   @override
@@ -6,118 +7,153 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  TextEditingController userFirst = new TextEditingController();
+  TextEditingController userLast = new TextEditingController();
+  TextEditingController userEmail = new TextEditingController();
+  TextEditingController userPassword = new TextEditingController();
+
+  bool valFirst = false;
+  bool valLast = false;
+  bool valEmail = false;
+  bool valPassword = false;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-            Widget>[
+        resizeToAvoidBottomInset: false,
+        body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
               SizedBox(height: 170.0),
-          Container(
-              padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'FIRST NAME',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        // hintText: 'EMAIL',
-                        // hintStyle: ,
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red))),
-                  ),
-                  SizedBox(height: 10.0),
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'LAST NAME',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red))),
-                  ),
-                  SizedBox(height: 10.0),
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'EMAIL',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red))),
-                  ),
-                  SizedBox(height: 10.0),
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'PASSWORD ',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red))),
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 50.0),
-                  Container(
-                      height: 40.0,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20.0),
-                        shadowColor: Colors.grey,
-                        color: Colors.red,
-                        elevation: 7.0,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Center(
-                            child: Text(
-                              'SIGNUP',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
+              Container(
+                  padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                  child: Column(
+                    children: <Widget>[
+                      TextField(
+                        controller: userFirst,
+                        decoration: InputDecoration(
+                            labelText: 'FIRST NAME',
+                            errorText: valFirst ? 'Can\'t be empty' : null,
+                            labelStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                            // hintText: 'EMAIL',
+                            // hintStyle: ,
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red))),
+                      ),
+                      SizedBox(height: 10.0),
+                      TextField(
+                        controller: userLast,
+                        decoration: InputDecoration(
+                            labelText: 'LAST NAME',
+                            errorText: valLast ? 'Can\'t be empty' : null,
+                            labelStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red))),
+                      ),
+                      SizedBox(height: 10.0),
+                      TextField(
+                        controller: userEmail,
+                        decoration: InputDecoration(
+                            labelText: 'EMAIL',
+                            errorText: valEmail ? 'Can\'t be empty' : null,
+                            labelStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red))),
+                      ),
+                      SizedBox(height: 10.0),
+                      TextField(
+                        controller: userPassword,
+                        decoration: InputDecoration(
+                            labelText: 'PASSWORD ',
+                            errorText: valPassword ? 'Can\'t be empty' : null,
+                            labelStyle: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red))),
+                        obscureText: true,
+                      ),
+                      SizedBox(height: 50.0),
+                      Container(
+                          height: 40.0,
+                          child: Material(
+                            borderRadius: BorderRadius.circular(20.0),
+                            shadowColor: Colors.grey,
+                            color: Colors.red,
+                            elevation: 7.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  userFirst.text.isEmpty
+                                      ? valFirst = true
+                                      : valFirst = false;
+                                  userLast.text.isEmpty
+                                      ? valLast = true
+                                      : valLast = false;
+                                  userEmail.text.isEmpty
+                                      ? valEmail = true
+                                      : valEmail = false;
+                                  userPassword.text.isEmpty
+                                      ? valPassword = true
+                                      : valPassword = false;
+                                });
+                                globals.uFirst = userFirst.text;
+                                globals.uLast = userLast.text;
+                                globals.uEmail = userEmail.text;
+                                globals.uPassword = userPassword.text;
+
+                                Navigator.of(context).pop();
+                              },
+                              child: Center(
+                                child: Text(
+                                  'SIGNUP',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ),
+                            ),
+                          )),
+                      SizedBox(height: 20.0),
+                      Container(
+                        height: 40.0,
+                        color: Colors.transparent,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.black,
+                                  style: BorderStyle.solid,
+                                  width: 1.0),
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Center(
+                              child: Text('Go Back',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat')),
                             ),
                           ),
                         ),
-                      )),
-                  SizedBox(height: 20.0),
-                  Container(
-                    height: 40.0,
-                    color: Colors.transparent,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.black,
-                              style: BorderStyle.solid,
-                              width: 1.0),
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child:
-
-                        Center(
-                          child: Text('Go Back',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat')),
-                        ),
-
-
                       ),
-                    ),
-                  ),
-                ],
-              )),
-        ]));
+                    ],
+                  )),
+            ]));
   }
 }
-
 
 // code cited: https://github.com/rajayogan/flutter-minimalloginUI/blob/master/lib/signup.dart
