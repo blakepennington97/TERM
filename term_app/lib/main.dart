@@ -187,12 +187,7 @@ class _SignInState extends State<SignInPage> {
                 ),
               ),
             ),
-<<<<<<< HEAD
-            SizedBox(height: 20.0),
-           ],
-=======
           ],
->>>>>>> cb3c18e05991da8aef466a1b68ec9d651649d6e6
         ));
   }
 }
