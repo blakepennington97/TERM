@@ -41,7 +41,11 @@ class ProgressState extends State<Progress> {
                   height: 37,
                 ),
                 const Text(
+<<<<<<< HEAD
                   'Weight',
+=======
+                  'Weight/Blood Pressure',
+>>>>>>> 6825ac3f5c211759898c4e28b1f143d625d5f0a2
                   style: TextStyle(
                     color: Color(0xff827daa),
                     fontSize: 16,
@@ -215,31 +219,9 @@ class ProgressState extends State<Progress> {
         const Color(0x00aa4cfc),
       ]),
     );
-    final LineChartBarData lineChartBarData3 = LineChartBarData(
-      spots: [
-        FlSpot(1, 2.8),
-        FlSpot(3, 1.9),
-        FlSpot(6, 3),
-        FlSpot(10, 1.3),
-        FlSpot(13, 2.5),
-      ],
-      isCurved: true,
-      colors: const [
-        Color(0xff27b6fc),
-      ],
-      barWidth: 8,
-      isStrokeCapRound: true,
-      dotData: FlDotData(
-        show: false,
-      ),
-      belowBarData: BarAreaData(
-        show: false,
-      ),
-    );
     return [
       lineChartBarData1,
       lineChartBarData2,
-      lineChartBarData3,
     ];
   }
 
@@ -461,6 +443,7 @@ class AddInputButton extends State<Progress>
   }
 }
 
+<<<<<<< HEAD
 class TestColumn extends StatelessWidget {
       @override
       Widget build(BuildContext context) {
@@ -475,3 +458,19 @@ class TestColumn extends StatelessWidget {
         );
       }
     }
+=======
+// class TestColumn extends StatelessWidget {
+//       @override
+//       Widget build(BuildContext context) {
+//         return Container(
+//           color: Colors.purple,
+//           child: Column(
+//             children: <Widget>[
+//               ProgressState(),
+//               AddInputButton()
+//             ],
+//           ),
+//         );
+//       }
+//     }
+>>>>>>> 6825ac3f5c211759898c4e28b1f143d625d5f0a2
