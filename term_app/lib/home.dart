@@ -17,7 +17,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static List<Widget> _children = [
     Progress(),
     Email(Colors.white),
-    Profile(Colors.black)
+    Profile()
   ];
 
   void _onItemTapped(int index) {
