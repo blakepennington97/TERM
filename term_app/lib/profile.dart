@@ -27,13 +27,16 @@ class ProfileState extends State<Profile> {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'MY TOP FIVE PREGNANCY GOALS',
+                        'MY PREGNANCY GOALS',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 20,
+                          color: Colors.grey[800],
+                          decoration: TextDecoration.underline,
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 8.0),
                       TextField(
                         maxLines: 2,
                         decoration: InputDecoration(
