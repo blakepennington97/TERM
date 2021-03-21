@@ -20,15 +20,16 @@ class _ProgressState extends State<Progress> {
   void initState() {
     super.initState();
     isShowingMainData = true;
+    InputButton();
   }
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.23,
+      aspectRatio: 1.1,
       child: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(18)),
+          borderRadius: BorderRadius.all(Radius.zero),
           gradient: LinearGradient(
             colors: [
               Color(0xff2c274c),
@@ -84,7 +85,7 @@ class _ProgressState extends State<Progress> {
                   isShowingMainData = !isShowingMainData;
                 });
               },
-            )
+            ),
           ],
         ),
       ),
@@ -454,24 +455,6 @@ class _InputButtonState extends State<InputButton> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Container(
-          color: const Color(0xFF192A56),
-          child: Center(
-            child: RaisedButton(
-              onPressed: () {
-                // The menu can be handled programatically using a key
-                if (fabKey.currentState.isOpen) {
-                  fabKey.currentState.close();
-                } else {
-                  fabKey.currentState.open();
-                }
-              },
-              color: Colors.white,
-              child: Text('Toggle menu programatically',
-                  style: TextStyle(color: primaryColor)),
-            ),
-          ),
-        ),
         floatingActionButton: Builder(
           builder: (context) => FabCircularMenu(
             key: fabKey,

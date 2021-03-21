@@ -23,8 +23,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      InputButton();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
