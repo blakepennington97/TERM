@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class Progress extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ProgressState();
+  
 // AddInputButton createState() => AddInputButton();
-}
 
 class ProgressState extends State<Progress> {
   bool isShowingMainData;
@@ -386,10 +386,12 @@ class AddInputButton extends State<Progress>
   @override
   initState() {
     _animationController =
+
     AnimationController(vsync: this, duration: Duration(milliseconds: 500))
       ..addListener(() {
         setState(() {});
       });
+
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _animateColor = ColorTween(
@@ -453,3 +455,4 @@ class AddInputButton extends State<Progress>
 //         );
 //       }
 //     }
+

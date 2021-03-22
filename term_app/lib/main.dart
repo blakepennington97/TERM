@@ -1,4 +1,5 @@
 /// Flutter code sample for BottomNavigationBar
+
 // This example shows a [BottomNavigationBar] as it is used within a [Scaffold]
 // widget. The [BottomNavigationBar] has three [BottomNavigationBarItem]
 // widgets and the [currentIndex] is set to index 0. The selected item is
@@ -69,6 +70,7 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
+
                       padding: EdgeInsets.fromLTRB(5.0, 140.0, 5.0, 0.0),
                       child: Image(
                           image: AssetImage('assets/term.png'),
@@ -136,7 +138,9 @@ class _SignInState extends State<SignInPage> {
                                   ? valEmail = false
                                   : valEmail = true;
                               ((userEmail.text == globals.uEmail) &&
+
                                   (userPassword.text != globals.uPassword))
+                              
                                   ? valPassword = true
                                   : valPassword = false;
                             });
@@ -165,9 +169,11 @@ class _SignInState extends State<SignInPage> {
               padding: EdgeInsets.only(right: 19.0, left: 19.0),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
+
                 shadowColor: Colors.grey[800],
                 color: Colors.red[900],
                 elevation: 7.0,
+
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed('/signup');
