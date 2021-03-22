@@ -13,11 +13,12 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _children = [
     Progress(),
     Email(Colors.white),
-    Profile(Colors.black)
+    Profile()
   ];
 
   void _onItemTapped(int index) {
