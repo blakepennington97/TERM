@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Progress extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class InputButton extends StatefulWidget {
 }
 
 class _ProgressState extends State<Progress> {
-  bool isShowingMainData;
+  bool isShowingMainData = true;
 
   @override
   void initState() {
@@ -25,8 +25,8 @@ class _ProgressState extends State<Progress> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.1,
+    return Container(
+      color: Colors.deepPurple,
       child: Container(
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.zero),
@@ -71,7 +71,7 @@ class _ProgressState extends State<Progress> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
               ],
             ),
@@ -113,7 +113,7 @@ class _ProgressState extends State<Progress> {
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          margin: 10,
+          margin: 220,
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
@@ -245,7 +245,7 @@ class _ProgressState extends State<Progress> {
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          margin: 10,
+          margin: 220,
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
@@ -381,152 +381,76 @@ class _ProgressState extends State<Progress> {
   }
 }
 
-class AddInputButton extends State<Progress>
-    with SingleTickerProviderStateMixin {
-  bool isOpened = false;
-  AnimationController _animationController;
-  Animation<Color> _animateColor;
-  Animation<double> _animateIcon;
-  Curve _curve = Curves.easeOut;
-
-  @override
-  initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-          ..addListener(() {
-            setState(() {});
-          });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _animateColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.00,
-        1.00,
-        curve: _curve,
-      ),
-    ));
-    super.initState();
-  }
-
-  @override
-  dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  animate() {
-    if (!isOpened) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-    isOpened = !isOpened;
-  }
-
-  Widget toggle() {
-    return FloatingActionButton(
-      backgroundColor: _animateColor.value,
-      onPressed: animate,
-      tooltip: 'Toggle',
-      child: AnimatedIcon(
-        icon: AnimatedIcons.menu_close,
-        progress: _animateIcon,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return toggle();
-  }
-}
-
 class _InputButtonState extends State<InputButton> {
-  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+  SpeedDial buildSpeedDial() {
+    return SpeedDial(
+      /// both default to 16
+      marginEnd: 18,
+      marginBottom: 20,
+      // animatedIcon: AnimatedIcons.menu_close,
+      // animatedIconTheme: IconThemeData(size: 22.0),
+      /// This is ignored if animatedIcon is non null
+      icon: Icons.add,
+      activeIcon: Icons.remove,
+      // iconTheme: IconThemeData(color: Colors.grey[50], size: 30),
 
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
+      /// The label of the main button.
+      // label: Text("Open Speed Dial"),
+      /// The active label of the main button, Defaults to label if not specified.
+      // activeLabel: Text("Close Speed Dial"),
+      /// Transition Builder between label and activeLabel, defaults to FadeTransition.
+      // labelTransitionBuilder: (widget, animation) => ScaleTransition(scale: animation,child: widget),
+      /// The below button size defaults to 56 itself, its the FAB size + It also affects relative padding and other elements
+      buttonSize: 56.0,
+      visible: true,
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        floatingActionButton: Builder(
-          builder: (context) => FabCircularMenu(
-            key: fabKey,
-            // Cannot be `Alignment.center`
-            alignment: Alignment.bottomRight,
-            ringColor: Colors.white.withAlpha(25),
-            ringDiameter: 500.0,
-            ringWidth: 150.0,
-            fabSize: 64.0,
-            fabElevation: 8.0,
-            fabIconBorder: CircleBorder(),
-            // Also can use specific color based on wether
-            // the menu is open or not:
-            // fabOpenColor: Colors.white
-            // fabCloseColor: Colors.white
-            // These properties take precedence over fabColor
-            fabColor: Colors.white,
-            fabOpenIcon: Icon(Icons.menu, color: primaryColor),
-            fabCloseIcon: Icon(Icons.close, color: primaryColor),
-            fabMargin: const EdgeInsets.all(16.0),
-            animationDuration: const Duration(milliseconds: 800),
-            animationCurve: Curves.easeInOutCirc,
-            onDisplayChange: (isOpen) {
-              _showSnackBar(
-                  context, "The menu is ${isOpen ? "open" : "closed"}");
-            },
-            children: <Widget>[
-              RawMaterialButton(
-                onPressed: () {
-                  _showSnackBar(context, "You pressed 1");
-                },
-                shape: CircleBorder(),
-                padding: const EdgeInsets.all(24.0),
-                child: Icon(Icons.looks_one, color: Colors.white),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  _showSnackBar(context, "You pressed 2");
-                },
-                shape: CircleBorder(),
-                padding: const EdgeInsets.all(24.0),
-                child: Icon(Icons.looks_two, color: Colors.white),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  _showSnackBar(context, "You pressed 3");
-                },
-                shape: CircleBorder(),
-                padding: const EdgeInsets.all(24.0),
-                child: Icon(Icons.looks_3, color: Colors.white),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  _showSnackBar(context,
-                      "You pressed 4. This one closes the menu on tap");
-                  fabKey.currentState.close();
-                },
-                shape: CircleBorder(),
-                padding: const EdgeInsets.all(24.0),
-                child: Icon(Icons.looks_4, color: Colors.white),
-              )
-            ],
-          ),
+      /// If true user is forced to close dial manually
+      /// by tapping main button and overlay is not rendered.
+      closeManually: false,
+      curve: Curves.bounceIn,
+      overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      onOpen: () => print('OPENING DIAL'),
+      onClose: () => print('DIAL CLOSED'),
+      tooltip: 'Speed Dial',
+      heroTag: 'speed-dial-hero-tag',
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      elevation: 8.0,
+      shape: CircleBorder(),
+      
+
+      // orientation: SpeedDialOrientation.Up,
+      // childMarginBottom: 2,
+      // childMarginTop: 2,
+      children: [
+        SpeedDialChild(
+          child: Icon(Icons.accessibility),
+          backgroundColor: Colors.red,
+          label: 'Blood Pressure',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => print('FIRST CHILD'),
+          onLongPress: () => print('FIRST CHILD LONG PRESS'),
         ),
-      ),
+        SpeedDialChild(
+          child: Icon(Icons.brush),
+          backgroundColor: Colors.blue,
+          label: 'Weight',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => print('SECOND CHILD'),
+          onLongPress: () => print('SECOND CHILD LONG PRESS'),
+        ),
+      ],
     );
   }
 
-  void _showSnackBar(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(milliseconds: 1000),
-    ));
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: Scaffold(
+            body: Progress(),
+            floatingActionButton: buildSpeedDial(),
+        )
+    );
   }
 }
