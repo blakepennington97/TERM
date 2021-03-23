@@ -70,12 +70,11 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                      padding: EdgeInsets.fromLTRB(65.0, 140.0, 0.0, 0.0),
-                      child: Text('TERM',
-                          style: TextStyle(
-                              fontSize: 100.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red))),
+
+                      padding: EdgeInsets.fromLTRB(5.0, 140.0, 5.0, 0.0),
+                      child: Image(
+                          image: AssetImage('assets/term.png'),
+                      ))
                 ],
               ),
             ),
@@ -91,9 +90,9 @@ class _SignInState extends State<SignInPage> {
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey),
+                              color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red))),
+                              borderSide: BorderSide(color: Colors.red[900]))),
                     ),
                     SizedBox(height: 20.0),
                     TextField(
@@ -104,9 +103,9 @@ class _SignInState extends State<SignInPage> {
                           labelStyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey),
+                              color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red))),
+                              borderSide: BorderSide(color: Colors.red[900]))),
                       obscureText: true,
                     ),
                     SizedBox(height: 35.0),
@@ -117,7 +116,7 @@ class _SignInState extends State<SignInPage> {
                         child: Text(
                           'Forgot Password',
                           style: TextStyle(
-                              color: Colors.grey,
+                              color: Colors.grey[800],
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Montserrat',
                               decoration: TextDecoration.underline),
@@ -129,8 +128,8 @@ class _SignInState extends State<SignInPage> {
                       height: 40.0,
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
-                        shadowColor: Colors.grey,
-                        color: Colors.red,
+                        shadowColor: Colors.grey[800],
+                        color: Colors.red[900],
                         elevation: 7.0,
                         child: GestureDetector(
                           onTap: () {
@@ -139,7 +138,9 @@ class _SignInState extends State<SignInPage> {
                                   ? valEmail = false
                                   : valEmail = true;
                               ((userEmail.text == globals.uEmail) &&
-                                      (userPassword.text != globals.uPassword))
+
+                                  (userPassword.text != globals.uPassword))
+                              
                                   ? valPassword = true
                                   : valPassword = false;
                             });
@@ -168,9 +169,11 @@ class _SignInState extends State<SignInPage> {
               padding: EdgeInsets.only(right: 19.0, left: 19.0),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Colors.grey,
-                color: Colors.red,
-                elevation: 1.0,
+
+                shadowColor: Colors.grey[800],
+                color: Colors.red[900],
+                elevation: 7.0,
+
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed('/signup');

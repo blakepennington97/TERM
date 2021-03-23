@@ -37,11 +37,11 @@ class _SignupPageState extends State<SignupPage> {
                             labelStyle: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey),
+                                color: Colors.grey[800]),
                             // hintText: 'EMAIL',
                             // hintStyle: ,
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red))),
+                                borderSide: BorderSide(color: Colors.red[900]))),
                       ),
                       SizedBox(height: 10.0),
                       TextField(
@@ -52,9 +52,9 @@ class _SignupPageState extends State<SignupPage> {
                             labelStyle: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey),
+                                color: Colors.grey[800]),
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red))),
+                                borderSide: BorderSide(color: Colors.red[900]))),
                       ),
                       SizedBox(height: 10.0),
                       TextField(
@@ -65,9 +65,9 @@ class _SignupPageState extends State<SignupPage> {
                             labelStyle: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey),
+                                color: Colors.grey[800]),
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red))),
+                                borderSide: BorderSide(color: Colors.red[900]))),
                       ),
                       SizedBox(height: 10.0),
                       TextField(
@@ -78,9 +78,9 @@ class _SignupPageState extends State<SignupPage> {
                             labelStyle: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey),
+                                color: Colors.grey[800]),
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red))),
+                                borderSide: BorderSide(color: Colors.red[900]))),
                         obscureText: true,
                       ),
                       SizedBox(height: 50.0),
@@ -88,8 +88,8 @@ class _SignupPageState extends State<SignupPage> {
                           height: 40.0,
                           child: Material(
                             borderRadius: BorderRadius.circular(20.0),
-                            shadowColor: Colors.grey,
-                            color: Colors.red,
+                            shadowColor: Colors.grey[800],
+                            color: Colors.red[900],
                             elevation: 7.0,
                             child: GestureDetector(
                               onTap: () {

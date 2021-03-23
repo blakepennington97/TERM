@@ -404,6 +404,7 @@ class _InputButtonState extends State<InputButton> {
       buttonSize: 56.0,
       visible: true,
 
+<<<<<<< HEAD
       /// If true user is forced to close dial manually
       /// by tapping main button and overlay is not rendered.
       closeManually: false,
@@ -419,6 +420,32 @@ class _InputButtonState extends State<InputButton> {
       elevation: 8.0,
       shape: CircleBorder(),
       
+=======
+  @override
+  initState() {
+    _animationController =
+
+    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _animateColor = ColorTween(
+      begin: Colors.blue,
+      end: Colors.red,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.00,
+        1.00,
+        curve: _curve,
+      ),
+    ));
+    super.initState();
+  }
+>>>>>>> 4d341bd323960f6942c6ec527be64dbe23fefe37
 
       // orientation: SpeedDialOrientation.Up,
       // childMarginBottom: 2,
@@ -454,3 +481,22 @@ class _InputButtonState extends State<InputButton> {
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+// class TestColumn extends StatelessWidget {
+//       @override
+//       Widget build(BuildContext context) {
+//         return Container(
+//           color: Colors.purple,
+//           child: Column(
+//             children: <Widget>[
+//               ProgressState(),
+//               AddInputButton()
+//             ],
+//           ),
+//         );
+//       }
+//     }
+
+>>>>>>> 4d341bd323960f6942c6ec527be64dbe23fefe37
