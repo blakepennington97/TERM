@@ -1,22 +1,24 @@
 import 'progress.dart';
 import 'email.dart';
 import 'profile.dart';
+import 'education.dart';
 import 'package:flutter/material.dart';
 
 /// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _HomeState createState() => _HomeState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+/// This is the private State class that goes with Home.
+class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
 
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _children = [
-    Progress(),
+    InputButton(),
+    Education(Colors.black),
     Email(Colors.white),
     Profile()
   ];
@@ -26,6 +28,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +38,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.deepPurple,
         unselectedItemColor: Colors.white54,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics_outlined),
             label: 'Progess',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb),
+            label: 'Education',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.messenger),

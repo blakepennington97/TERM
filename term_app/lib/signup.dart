@@ -41,7 +41,8 @@ class _SignupPageState extends State<SignupPage> {
                             // hintText: 'EMAIL',
                             // hintStyle: ,
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red[900]))),
+                                borderSide:
+                                    BorderSide(color: Colors.red.shade900))),
                       ),
                       SizedBox(height: 10.0),
                       TextField(
@@ -54,7 +55,8 @@ class _SignupPageState extends State<SignupPage> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey[800]),
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red[900]))),
+                                borderSide:
+                                    BorderSide(color: Colors.red.shade900))),
                       ),
                       SizedBox(height: 10.0),
                       TextField(
@@ -67,7 +69,8 @@ class _SignupPageState extends State<SignupPage> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey[800]),
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red[900]))),
+                                borderSide:
+                                    BorderSide(color: Colors.red.shade900))),
                       ),
                       SizedBox(height: 10.0),
                       TextField(
@@ -80,7 +83,8 @@ class _SignupPageState extends State<SignupPage> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey[800]),
                             focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red[900]))),
+                                borderSide:
+                                    BorderSide(color: Colors.red.shade900))),
                         obscureText: true,
                       ),
                       SizedBox(height: 50.0),
@@ -89,7 +93,7 @@ class _SignupPageState extends State<SignupPage> {
                           child: Material(
                             borderRadius: BorderRadius.circular(20.0),
                             shadowColor: Colors.grey[800],
-                            color: Colors.red[900],
+                            color: Colors.red.shade900,
                             elevation: 7.0,
                             child: GestureDetector(
                               onTap: () {
