@@ -16,21 +16,6 @@ import 'package:term_app/home.dart';
 import 'signup.dart';
 import 'globals.dart' as globals;
 
-// void main() => runApp(MyApp());
-
-// /// This is the main application widget.
-// class MyApp extends StatelessWidget {
-//   static const String _title = 'Flutter Code Sample';
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: _title,
-//       home: MyStatefulWidget(),
-//     );
-//   }
-// }
-
 void main() => runApp(new SignIn());
 
 class SignIn extends StatelessWidget {
@@ -40,7 +25,7 @@ class SignIn extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/signup': (BuildContext context) => new SignupPage(),
-        '/home': (BuildContext context) => new MyStatefulWidget()
+        '/home': (BuildContext context) => new Home()
       },
       home: new SignInPage(),
     );
@@ -70,10 +55,9 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-
                       padding: EdgeInsets.fromLTRB(5.0, 140.0, 5.0, 0.0),
                       child: Image(
-                          image: AssetImage('assets/term.png'),
+                        image: AssetImage('assets/term.png'),
                       ))
                 ],
               ),
@@ -92,7 +76,7 @@ class _SignInState extends State<SignInPage> {
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[900]))),
+                              borderSide: BorderSide(color: Colors.red))),
                     ),
                     SizedBox(height: 20.0),
                     TextField(
@@ -105,7 +89,7 @@ class _SignInState extends State<SignInPage> {
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[900]))),
+                              borderSide: BorderSide(color: Colors.red))),
                       obscureText: true,
                     ),
                     SizedBox(height: 35.0),
@@ -129,7 +113,7 @@ class _SignInState extends State<SignInPage> {
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
                         shadowColor: Colors.grey[800],
-                        color: Colors.red[900],
+                        color: Colors.red.shade900,
                         elevation: 7.0,
                         child: GestureDetector(
                           onTap: () {
@@ -138,9 +122,7 @@ class _SignInState extends State<SignInPage> {
                                   ? valEmail = false
                                   : valEmail = true;
                               ((userEmail.text == globals.uEmail) &&
-
-                                  (userPassword.text != globals.uPassword))
-                              
+                                      (userPassword.text != globals.uPassword))
                                   ? valPassword = true
                                   : valPassword = false;
                             });
@@ -169,11 +151,9 @@ class _SignInState extends State<SignInPage> {
               padding: EdgeInsets.only(right: 19.0, left: 19.0),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
-
                 shadowColor: Colors.grey[800],
-                color: Colors.red[900],
+                color: Colors.red.shade900,
                 elevation: 7.0,
-
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed('/signup');
