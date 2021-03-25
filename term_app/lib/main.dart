@@ -70,10 +70,9 @@ class _SignInState extends State<SignInPage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-
                       padding: EdgeInsets.fromLTRB(5.0, 140.0, 5.0, 0.0),
                       child: Image(
-                          image: AssetImage('assets/term.png'),
+                        image: AssetImage('assets/term.png'),
                       ))
                 ],
               ),
@@ -92,7 +91,7 @@ class _SignInState extends State<SignInPage> {
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[900]))),
+                              borderSide: BorderSide(color: Colors.red))),
                     ),
                     SizedBox(height: 20.0),
                     TextField(
@@ -105,7 +104,7 @@ class _SignInState extends State<SignInPage> {
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[800]),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[900]))),
+                              borderSide: BorderSide(color: Colors.red))),
                       obscureText: true,
                     ),
                     SizedBox(height: 35.0),
@@ -129,7 +128,7 @@ class _SignInState extends State<SignInPage> {
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
                         shadowColor: Colors.grey[800],
-                        color: Colors.red[900],
+                        color: Colors.red.shade900,
                         elevation: 7.0,
                         child: GestureDetector(
                           onTap: () {
@@ -138,9 +137,7 @@ class _SignInState extends State<SignInPage> {
                                   ? valEmail = false
                                   : valEmail = true;
                               ((userEmail.text == globals.uEmail) &&
-
-                                  (userPassword.text != globals.uPassword))
-                              
+                                      (userPassword.text != globals.uPassword))
                                   ? valPassword = true
                                   : valPassword = false;
                             });
@@ -169,11 +166,9 @@ class _SignInState extends State<SignInPage> {
               padding: EdgeInsets.only(right: 19.0, left: 19.0),
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
-
                 shadowColor: Colors.grey[800],
-                color: Colors.red[900],
+                color: Colors.red.shade900,
                 elevation: 7.0,
-
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed('/signup');

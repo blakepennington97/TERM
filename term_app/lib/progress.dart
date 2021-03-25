@@ -1,6 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:flutter/services.dart';
 
 class Progress extends StatefulWidget {
   @override
@@ -11,6 +14,11 @@ class Progress extends StatefulWidget {
 class InputButton extends StatefulWidget {
   @override
   _InputButtonState createState() => _InputButtonState();
+}
+
+class UserInput extends StatefulWidget {
+  @override
+  _UserInputState createState() => _UserInputState();
 }
 
 class _ProgressState extends State<Progress> {
@@ -189,7 +197,7 @@ class _ProgressState extends State<Progress> {
       ],
       isCurved: true,
       colors: [
-        const Color(0xff4af699),
+        Colors.green,
       ],
       barWidth: 8,
       isStrokeCapRound: true,
@@ -211,7 +219,7 @@ class _ProgressState extends State<Progress> {
       ],
       isCurved: true,
       colors: [
-        const Color(0xffaa4cfc),
+        Colors.red,
       ],
       barWidth: 8,
       isStrokeCapRound: true,
@@ -382,6 +390,15 @@ class _ProgressState extends State<Progress> {
 }
 
 class _InputButtonState extends State<InputButton> {
+  double blood_pressure = 0;
+  double user_input = 0;
+  final bloodPressureController = TextEditingController();
+
+  setBloodPressure() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('blood_pressure', user_input);
+  }
+
   SpeedDial buildSpeedDial() {
     return SpeedDial(
       /// both default to 16
@@ -404,7 +421,6 @@ class _InputButtonState extends State<InputButton> {
       buttonSize: 56.0,
       visible: true,
 
-<<<<<<< HEAD
       /// If true user is forced to close dial manually
       /// by tapping main button and overlay is not rendered.
       closeManually: false,
@@ -419,49 +435,25 @@ class _InputButtonState extends State<InputButton> {
       foregroundColor: Colors.black,
       elevation: 8.0,
       shape: CircleBorder(),
-      
-=======
-  @override
-  initState() {
-    _animationController =
-
-    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-      ..addListener(() {
-        setState(() {});
-      });
-
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _animateColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.00,
-        1.00,
-        curve: _curve,
-      ),
-    ));
-    super.initState();
-  }
->>>>>>> 4d341bd323960f6942c6ec527be64dbe23fefe37
 
       // orientation: SpeedDialOrientation.Up,
       // childMarginBottom: 2,
       // childMarginTop: 2,
       children: [
         SpeedDialChild(
-          child: Icon(Icons.accessibility),
+          child: Icon(Icons.favorite),
           backgroundColor: Colors.red,
           label: 'Blood Pressure',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('FIRST CHILD'),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserInput()),
+          ),
           onLongPress: () => print('FIRST CHILD LONG PRESS'),
         ),
         SpeedDialChild(
-          child: Icon(Icons.brush),
-          backgroundColor: Colors.blue,
+          child: Icon(Icons.trending_up),
+          backgroundColor: Colors.green,
           label: 'Weight',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => print('SECOND CHILD'),
@@ -475,28 +467,43 @@ class _InputButtonState extends State<InputButton> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-            body: Progress(),
-            floatingActionButton: buildSpeedDial(),
-        )
+      body: Progress(),
+      floatingActionButton: buildSpeedDial(),
+    ));
+  }
+}
+
+class _UserInputState extends State<UserInput> {
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      backgroundColor: Colors.grey,
+      body: new Container(
+          padding: const EdgeInsets.all(40.0),
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new TextField(
+                textAlign: TextAlign.center,
+                decoration: new InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: "Enter your blood pressure", 
+                    fillColor: Colors.red
+                    ),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ], // Only numbers can be entered
+              ),
+              SizedBox(height: 30),
+              new TextButton.icon(
+                icon: Icon(Icons.check),
+                label: Text(''),
+                onPressed: () {
+                  // save value and return to Progress
+                },
+              ),
+            ],
+          )),
     );
   }
 }
-<<<<<<< HEAD
-=======
-
-// class TestColumn extends StatelessWidget {
-//       @override
-//       Widget build(BuildContext context) {
-//         return Container(
-//           color: Colors.purple,
-//           child: Column(
-//             children: <Widget>[
-//               ProgressState(),
-//               AddInputButton()
-//             ],
-//           ),
-//         );
-//       }
-//     }
-
->>>>>>> 4d341bd323960f6942c6ec527be64dbe23fefe37
