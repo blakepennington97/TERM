@@ -4,6 +4,9 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:term_app/home.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'dart:io';
 
 class Progress extends StatefulWidget {
   @override
@@ -16,14 +19,22 @@ class InputButton extends StatefulWidget {
   _InputButtonState createState() => _InputButtonState();
 }
 
-class UserInput extends StatefulWidget {
+class UserInputBloodPressure extends StatefulWidget {
   @override
-  _UserInputState createState() => _UserInputState();
+  _UserInputBloodPressureState createState() => _UserInputBloodPressureState();
+}
+
+class UserInputWeight extends StatefulWidget {
+  @override
+  _UserInputWeightState createState() => _UserInputWeightState();
 }
 
 class _ProgressState extends State<Progress> {
   bool isShowingMainData = true;
+  String mainTitle = 'Blood Pressure';
   int? data = 0;
+  List<FlSpot> bloodPressurePoints = [];
+  List<FlSpot> weightPoints = [];
 
   @override
   void initState() {
@@ -65,7 +76,7 @@ class _ProgressState extends State<Progress> {
                   height: 37,
                 ),
                 const Text(
-                  'Weight/Blood Pressure',
+                  'Weight & Blood Pressure',
                   style: TextStyle(
                     color: Color(0xff827daa),
                     fontSize: 16,
@@ -124,21 +135,21 @@ class _ProgressState extends State<Progress> {
       titlesData: FlTitlesData(
         bottomTitles: SideTitles(
           showTitles: true,
-          reservedSize: 22,
+          reservedSize: 150,
           getTextStyles: (value) => const TextStyle(
             color: Color(0xff72719b),
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          margin: 220,
+          margin: 8,
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
-                return 'SEPT';
-              case 7:
-                return 'OCT';
-              case 12:
-                return 'DEC';
+                return 'MAR';
+              case 5:
+                return 'JUN';
+              case 8:
+                return 'SEP';
             }
             return '';
           },
@@ -152,14 +163,16 @@ class _ProgressState extends State<Progress> {
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '1m';
-              case 2:
-                return '2m';
-              case 3:
-                return '3m';
-              case 4:
-                return '5m';
+              case 60:
+                return '60';
+              case 80:
+                return '80';
+              case 100:
+                return '100';
+              case 120:
+                return '120';
+              case 140:
+                return '140';
             }
             return '';
           },
@@ -186,9 +199,9 @@ class _ProgressState extends State<Progress> {
         ),
       ),
       minX: 0,
-      maxX: 14,
-      maxY: 4,
-      minY: 0,
+      maxX: 10,
+      maxY: 140,
+      minY: 60,
       lineBarsData: bloodPressurePointData(),
     );
   }
@@ -196,17 +209,17 @@ class _ProgressState extends State<Progress> {
   List<LineChartBarData> bloodPressurePointData() {
     final LineChartBarData lineChartBarData1 = LineChartBarData(
       spots: [
-        FlSpot(1, 1),
-        FlSpot(3, 1.5),
-        FlSpot(5, 1.4),
-        FlSpot(7, 3.4),
-        FlSpot(10, 2),
-        FlSpot(12, 2.2),
-        FlSpot(13, 1.8),
+        FlSpot(1, 110),
+        FlSpot(2, 120),
+        FlSpot(3, 130),
+        FlSpot(5, 105),
+        FlSpot(6, 120),
+        FlSpot(7, 113),
+        FlSpot(9, 120),
       ],
       isCurved: true,
       colors: [
-        Colors.green,
+        Colors.red.shade300,
       ],
       barWidth: 8,
       isStrokeCapRound: true,
@@ -219,16 +232,17 @@ class _ProgressState extends State<Progress> {
     );
     final LineChartBarData lineChartBarData2 = LineChartBarData(
       spots: [
-        FlSpot(1, 1),
-        FlSpot(3, 2.8),
-        FlSpot(7, 1.2),
-        FlSpot(10, 2.8),
-        FlSpot(12, 2.6),
-        FlSpot(13, 3.9),
+        FlSpot(1, 80),
+        FlSpot(2, 85),
+        FlSpot(3, 95),
+        FlSpot(5, 105),
+        FlSpot(6, 85),
+        FlSpot(7, 80),
+        FlSpot(9, 82),
       ],
       isCurved: true,
       colors: [
-        Colors.red,
+        Colors.blue.shade300,
       ],
       barWidth: 8,
       isStrokeCapRound: true,
@@ -256,21 +270,21 @@ class _ProgressState extends State<Progress> {
       titlesData: FlTitlesData(
         bottomTitles: SideTitles(
           showTitles: true,
-          reservedSize: 22,
+          reservedSize: 150,
           getTextStyles: (value) => const TextStyle(
             color: Color(0xff72719b),
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          margin: 220,
+          margin: 8,
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
-                return 'SEPT';
-              case 7:
-                return 'OCT';
-              case 12:
-                return 'DEC';
+                return 'MAR';
+              case 5:
+                return 'JUN';
+              case 8:
+                return 'SEP';
             }
             return '';
           },
@@ -284,16 +298,14 @@ class _ProgressState extends State<Progress> {
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '1m';
-              case 2:
-                return '2m';
-              case 3:
-                return '3m';
-              case 4:
-                return '5m';
-              case 5:
-                return '6m';
+              case 100:
+                return '100';
+              case 125:
+                return '125';
+              case 150:
+                return '150';
+              case 175:
+                return '175';
             }
             return '';
           },
@@ -319,9 +331,9 @@ class _ProgressState extends State<Progress> {
             ),
           )),
       minX: 0,
-      maxX: 14,
-      maxY: 6,
-      minY: 0,
+      maxX: 10,
+      maxY: 200,
+      minY: 75,
       lineBarsData: weightPointData(),
     );
   }
@@ -330,66 +342,24 @@ class _ProgressState extends State<Progress> {
     return [
       LineChartBarData(
         spots: [
-          FlSpot(1, 1),
-          FlSpot(3, 4),
-          FlSpot(5, 1.8),
-          FlSpot(7, 5),
-          FlSpot(10, 2),
-          FlSpot(12, 2.2),
-          FlSpot(13, 1.8),
+          FlSpot(1, 110),
+          FlSpot(2, 112),
+          FlSpot(3, 115),
+          FlSpot(5, 120),
+          FlSpot(6, 130),
+          FlSpot(7, 142),
+          FlSpot(9, 155),
         ],
         isCurved: true,
         curveSmoothness: 0,
-        colors: const [
-          Color(0x444af699),
+        colors: [
+          Colors.yellow.shade800,
         ],
         barWidth: 4,
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: false,
         ),
-        belowBarData: BarAreaData(
-          show: false,
-        ),
-      ),
-      LineChartBarData(
-        spots: [
-          FlSpot(1, 1),
-          FlSpot(3, 2.8),
-          FlSpot(7, 1.2),
-          FlSpot(10, 2.8),
-          FlSpot(12, 2.6),
-          FlSpot(13, 3.9),
-        ],
-        isCurved: true,
-        colors: const [
-          Color(0x99aa4cfc),
-        ],
-        barWidth: 4,
-        isStrokeCapRound: true,
-        dotData: FlDotData(
-          show: false,
-        ),
-        belowBarData: BarAreaData(show: true, colors: [
-          const Color(0x33aa4cfc),
-        ]),
-      ),
-      LineChartBarData(
-        spots: [
-          FlSpot(1, 3.8),
-          FlSpot(3, 1.9),
-          FlSpot(6, 5),
-          FlSpot(10, 3.3),
-          FlSpot(13, 4.5),
-        ],
-        isCurved: true,
-        curveSmoothness: 0,
-        colors: const [
-          Color(0x4427b6fc),
-        ],
-        barWidth: 2,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: true),
         belowBarData: BarAreaData(
           show: false,
         ),
@@ -449,7 +419,7 @@ class _InputButtonState extends State<InputButton> {
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => UserInput()),
+            MaterialPageRoute(builder: (context) => UserInputBloodPressure()),
           ),
           onLongPress: () => print('FIRST CHILD LONG PRESS'),
         ),
@@ -458,7 +428,10 @@ class _InputButtonState extends State<InputButton> {
           backgroundColor: Colors.green,
           label: 'Weight',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('SECOND CHILD'),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserInputWeight()),
+          ),
           onLongPress: () => print('SECOND CHILD LONG PRESS'),
         ),
       ],
@@ -475,14 +448,54 @@ class _InputButtonState extends State<InputButton> {
   }
 }
 
-class _UserInputState extends State<UserInput> {
+class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
   TextEditingController inputController = new TextEditingController();
+  String data = "";
 
+  // find directory path
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  // find the local file
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/blood_pressure_points.txt');
+  }
+
+  Future<File> writeFile(String input) async {
+    final file = await _localFile;
+
+    // Write the file.
+    return file.writeAsString('$input');
+  }
+
+  // Triggered after user input is completed
+  Future<int> readData() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file.
+      String contents = await file.readAsString();
+      print("Contents: " + contents);
+      setState(() {
+        contents = data;
+      });
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0.
+      return 0;
+    }
+  }
+
+  //update data file with user blood pressure data
   setBloodPressure(user_input) async {
     print("User val --> " + user_input);
-    user_input = int.parse(user_input);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('blood_pressure', user_input);
+    writeFile(user_input);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setInt('blood_pressure', user_input);
+    readData();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Home()),
@@ -519,6 +532,100 @@ class _UserInputState extends State<UserInput> {
                 onPressed: () {
                   // save value and return to Progress
                   setBloodPressure(inputController.text);
+                  inputController.clear();
+                },
+              ),
+            ],
+          )),
+    );
+  }
+}
+
+class _UserInputWeightState extends State<UserInputWeight> {
+  TextEditingController inputController = new TextEditingController();
+  String data = "";
+
+  // find directory path
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  // find the local file
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/weight_points.txt');
+  }
+
+  Future<File> writeFile(String input) async {
+    final file = await _localFile;
+
+    // Write the file.
+    return file.writeAsString('$input');
+  }
+
+  // Triggered after user input is completed
+  Future<int> readData() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file.
+      String contents = await file.readAsString();
+      print("Contents: " + contents);
+      setState(() {
+        contents = data;
+      });
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0.
+      return 0;
+    }
+  }
+
+  //update data file with user blood pressure data
+  setBloodPressure(user_input) async {
+    print("User val --> " + user_input);
+    writeFile(user_input);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setInt('blood_pressure', user_input);
+    readData();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home()),
+    );
+  }
+
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      backgroundColor: Colors.white10,
+      body: new Container(
+          padding: const EdgeInsets.all(40.0),
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new TextField(
+                controller: inputController,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                decoration: new InputDecoration(
+                  border: new OutlineInputBorder(
+                      borderSide: new BorderSide(color: Colors.white)),
+                  labelText: "Enter your current weight",
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ], // Only numbers can be entered
+              ),
+              SizedBox(height: 30), // padding between the children
+              new TextButton.icon(
+                icon: Icon(Icons.check),
+                label: Text(''),
+                onPressed: () {
+                  // save value and return to Progress
+                  setBloodPressure(inputController.text);
+                  inputController.clear();
                 },
               ),
             ],
