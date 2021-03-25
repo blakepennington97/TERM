@@ -5,13 +5,13 @@ import 'education.dart';
 import 'package:flutter/material.dart';
 
 /// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _HomeState createState() => _HomeState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+/// This is the private State class that goes with Home.
+class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
 

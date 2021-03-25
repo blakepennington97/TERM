@@ -2,8 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/services.dart';
+import 'package:term_app/home.dart';
 
 class Progress extends StatefulWidget {
   @override
@@ -23,12 +23,21 @@ class UserInput extends StatefulWidget {
 
 class _ProgressState extends State<Progress> {
   bool isShowingMainData = true;
+  int? data = 0;
 
   @override
   void initState() {
     super.initState();
     isShowingMainData = true;
     InputButton();
+    getData();
+  }
+
+  getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      data = prefs.getInt('blood_pressure');
+    });
   }
 
   @override
@@ -73,7 +82,7 @@ class _ProgressState extends State<Progress> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16.0, left: 6.0),
                     child: LineChart(
-                      isShowingMainData ? sampleData1() : sampleData2(),
+                      isShowingMainData ? bloodPressureData() : weightData(),
                       swapAnimationDuration: const Duration(milliseconds: 250),
                     ),
                   ),
@@ -100,7 +109,7 @@ class _ProgressState extends State<Progress> {
     );
   }
 
-  LineChartData sampleData1() {
+  LineChartData bloodPressureData() {
     return LineChartData(
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
@@ -180,11 +189,11 @@ class _ProgressState extends State<Progress> {
       maxX: 14,
       maxY: 4,
       minY: 0,
-      lineBarsData: linesBarData1(),
+      lineBarsData: bloodPressurePointData(),
     );
   }
 
-  List<LineChartBarData> linesBarData1() {
+  List<LineChartBarData> bloodPressurePointData() {
     final LineChartBarData lineChartBarData1 = LineChartBarData(
       spots: [
         FlSpot(1, 1),
@@ -236,7 +245,7 @@ class _ProgressState extends State<Progress> {
     ];
   }
 
-  LineChartData sampleData2() {
+  LineChartData weightData() {
     return LineChartData(
       lineTouchData: LineTouchData(
         enabled: false,
@@ -313,11 +322,11 @@ class _ProgressState extends State<Progress> {
       maxX: 14,
       maxY: 6,
       minY: 0,
-      lineBarsData: linesBarData2(),
+      lineBarsData: weightPointData(),
     );
   }
 
-  List<LineChartBarData> linesBarData2() {
+  List<LineChartBarData> weightPointData() {
     return [
       LineChartBarData(
         spots: [
@@ -390,14 +399,7 @@ class _ProgressState extends State<Progress> {
 }
 
 class _InputButtonState extends State<InputButton> {
-  double blood_pressure = 0;
-  double user_input = 0;
   final bloodPressureController = TextEditingController();
-
-  setBloodPressure() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setDouble('blood_pressure', user_input);
-  }
 
   SpeedDial buildSpeedDial() {
     return SpeedDial(
@@ -474,21 +476,37 @@ class _InputButtonState extends State<InputButton> {
 }
 
 class _UserInputState extends State<UserInput> {
+  TextEditingController inputController = new TextEditingController();
+
+  setBloodPressure(user_input) async {
+    print("User val --> " + user_input);
+    user_input = int.parse(user_input);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('blood_pressure', user_input);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home()),
+    );
+  }
+
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white10,
       body: new Container(
           padding: const EdgeInsets.all(40.0),
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextField(
+                controller: inputController,
+                style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
                 decoration: new InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: "Enter your blood pressure", 
-                    fillColor: Colors.red
-                    ),
+                  border: new OutlineInputBorder(
+                      borderSide: new BorderSide(color: Colors.white)),
+                  labelText: "Enter your blood pressure",
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -500,6 +518,7 @@ class _UserInputState extends State<UserInput> {
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
+                  setBloodPressure(inputController.text);
                 },
               ),
             ],

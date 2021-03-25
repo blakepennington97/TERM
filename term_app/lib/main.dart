@@ -16,21 +16,6 @@ import 'package:term_app/home.dart';
 import 'signup.dart';
 import 'globals.dart' as globals;
 
-// void main() => runApp(MyApp());
-
-// /// This is the main application widget.
-// class MyApp extends StatelessWidget {
-//   static const String _title = 'Flutter Code Sample';
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: _title,
-//       home: MyStatefulWidget(),
-//     );
-//   }
-// }
-
 void main() => runApp(new SignIn());
 
 class SignIn extends StatelessWidget {
@@ -40,7 +25,7 @@ class SignIn extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/signup': (BuildContext context) => new SignupPage(),
-        '/home': (BuildContext context) => new MyStatefulWidget()
+        '/home': (BuildContext context) => new Home()
       },
       home: new SignInPage(),
     );
