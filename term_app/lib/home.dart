@@ -1,6 +1,7 @@
 import 'progress.dart';
 import 'email.dart';
 import 'profile.dart';
+import 'education.dart';
 import 'package:flutter/material.dart';
 
 /// This is the stateful widget that the main application instantiates.
@@ -17,6 +18,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _children = [
     InputButton(),
+    Education(Colors.black),
     Email(Colors.white),
     Profile()
   ];
@@ -24,7 +26,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      InputButton();
     });
   }
 
@@ -37,12 +38,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.deepPurple,
         unselectedItemColor: Colors.white54,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics_outlined),
             label: 'Progess',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb),
+            label: 'Education',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.messenger),

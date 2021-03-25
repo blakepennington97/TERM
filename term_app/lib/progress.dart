@@ -494,7 +494,7 @@ class _UserInputState extends State<UserInput> {
                   FilteringTextInputFormatter.digitsOnly
                 ], // Only numbers can be entered
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 30), // padding between the children
               new TextButton.icon(
                 icon: Icon(Icons.check),
                 label: Text(''),
