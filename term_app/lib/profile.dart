@@ -20,7 +20,7 @@ class ProfileState extends State<Profile> {
         resizeToAvoidBottomInset: false,
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
             Widget>[
-          SizedBox(height: 290.0),
+          SizedBox(height: 210),
           Container(
               padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: Column(children: <Widget>[
