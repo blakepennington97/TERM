@@ -22,17 +22,32 @@ class Email extends StatelessWidget {
     return new Scaffold(
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
-            child: Center(
-          child: Column(children: <Widget>[
-            ElevatedButton(
-                child: Text('Send Email'),
-                onPressed: () {
-                  _launchEmail('sample@gmail.com');
-                }),
-            SizedBox(
-              height: 20.0,
-            ),
-          ]),
-        )));
+          //child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 45.0,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.lightBlue),
+                        minimumSize: MaterialStateProperty.all(Size(250, 150)),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(50)),
+                      ),
+                      child: Text(
+                        'Send Email',
+                        style: TextStyle(fontSize: 40),
+                      ),
+                      onPressed: () {
+                        _launchEmail('sample@gmail.com');
+                      }),
+                ),
+              ]),
+        ));
   }
 }
