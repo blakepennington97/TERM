@@ -450,6 +450,7 @@ class _InputButtonState extends State<InputButton> {
 
 class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
   TextEditingController inputController = new TextEditingController();
+  TextEditingController inputController2 = new TextEditingController();
   String data = "";
 
   // find directory path
@@ -517,7 +518,23 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
                 decoration: new InputDecoration(
                   border: new OutlineInputBorder(
                       borderSide: new BorderSide(color: Colors.white)),
-                  labelText: "Enter your blood pressure",
+                  labelText: "Systolic blood pressure",
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ], // Only numbers can be entered
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              new TextField(
+                controller: inputController2,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                decoration: new InputDecoration(
+                  border: new OutlineInputBorder(
+                      borderSide: new BorderSide(color: Colors.white)),
+                  labelText: "Diastolic blood pressure",
                   labelStyle: TextStyle(color: Colors.white),
                 ),
                 keyboardType: TextInputType.number,
@@ -533,6 +550,7 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
                   // save value and return to Progress
                   setBloodPressure(inputController.text);
                   inputController.clear();
+                  inputController2.clear();
                 },
               ),
             ],
@@ -543,6 +561,7 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
 
 class _UserInputWeightState extends State<UserInputWeight> {
   TextEditingController inputController = new TextEditingController();
+  TextEditingController inputController2 = new TextEditingController();
   String data = "";
 
   // find directory path
@@ -583,9 +602,9 @@ class _UserInputWeightState extends State<UserInputWeight> {
   }
 
   //update data file with user blood pressure data
-  setBloodPressure(user_input) async {
-    print("User val --> " + user_input);
-    writeFile(user_input);
+  setBloodPressure(blood_pressure) async {
+    print("User val --> " + blood_pressure);
+    writeFile(blood_pressure);
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.setInt('blood_pressure', user_input);
     readData();
