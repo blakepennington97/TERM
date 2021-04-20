@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _children = [
     InputButton(),
-    Education(Colors.black),
+    Education(),
     Email(Colors.white),
     Profile()
   ];
