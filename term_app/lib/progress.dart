@@ -1,12 +1,15 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:term_app/home.dart';
+import 'package:term_app/email.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:screenshot/screenshot.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class Progress extends StatefulWidget {
   @override
@@ -33,22 +36,65 @@ class _ProgressState extends State<Progress> {
   bool isShowingMainData = true;
   String mainTitle = 'Blood Pressure';
   int data = 0;
-  List<FlSpot> bloodPressurePoints = [];
+  List<FlSpot> systolicPoints = [];
+  List<FlSpot> diastolicPoints = [];
   List<FlSpot> weightPoints = [];
+  Uint8List _imageFile;
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void initState() {
     super.initState();
     isShowingMainData = true;
     InputButton();
-    getData();
+    updateAllCharts();
   }
 
-  getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      data = prefs.getInt('blood_pressure');
+  updateChart(file, chart_name) {
+    weightPoints.clear();
+    systolicPoints.clear();
+    diastolicPoints.clear();
+    // Read the file and update the line chart data
+    file.readAsString().then((String contents) {
+      print(contents);
+      List<String> lines = contents.split('\n');
+      for (var i = 0; i <= lines.length; i++) {
+        double x_val = double.parse(lines[i].split(' ')[0]);
+        double y_val = double.parse(lines[i].split(' ')[1]);
+        if (chart_name == "weight") {
+          weightPoints.add(FlSpot(x_val, y_val));
+        }
+        if (chart_name == "systolic") {
+          systolicPoints.add(FlSpot(x_val, y_val));
+        }
+        if (chart_name == "diastolic") {
+          diastolicPoints.add(FlSpot(x_val, y_val));
+        }
+      }
+      if (chart_name == "weight") {
+        weightPoints.sort((a, b) => (a.x).compareTo((b.x)));
+        print("SORTED POINTS: ");
+        print(weightPoints);
+      }
+      if (chart_name == "systolic") {
+        //systolicPoints.add(FlSpot(x_val, y_val));
+      }
+      if (chart_name == "diastolic") {
+        //diastolicPoints.add(FlSpot(x_val, y_val));
+      }
     });
+  }
+
+  updateAllCharts() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final weight_file = File('$path/weight_points.txt');
+    final diastolic_file = File('$path/diastolic_points.txt');
+    final systolic_file = File('$path/systolic_points.txt');
+    updateChart(weight_file, "weight");
+    updateChart(diastolic_file, "diastolic");
+    updateChart(systolic_file, "systolic");
   }
 
   @override
@@ -69,39 +115,67 @@ class _ProgressState extends State<Progress> {
         ),
         child: Stack(
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const SizedBox(
-                  height: 37,
-                ),
-                const Text(
-                  'Weight & Blood Pressure',
-                  style: TextStyle(
-                    color: Color(0xff827daa),
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
-                  height: 37,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 6.0),
-                    child: LineChart(
-                      isShowingMainData ? bloodPressureData() : weightData(),
-                      swapAnimationDuration: const Duration(milliseconds: 250),
+            Screenshot(
+              controller: screenshotController,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 37,
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
+                    const Text(
+                      'Weight & Blood Pressure',
+                      style: TextStyle(
+                        color: Color(0xff827daa),
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    const SizedBox(
+                      height: 37,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16.0, left: 6.0),
+                        child: LineChart(
+                          isShowingMainData
+                              ? bloodPressureData()
+                              : weightData(),
+                          swapAnimationDuration:
+                              const Duration(milliseconds: 250),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    new ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red.shade300, // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        child: Text('Save Screenshot'),
+                        onPressed: () {
+                          screenshotController
+                              .capture()
+                              .then((Uint8List image) async {
+                            setState(() {
+                              _imageFile = image;
+                            });
+                            final result =
+                                await ImageGallerySaver.saveImage(image);
+                            print("Image saved to gallery.");
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => EmailSender()),
+                            // );
+                          });
+                        })
+                  ]),
             ),
             IconButton(
               icon: Icon(
@@ -208,15 +282,7 @@ class _ProgressState extends State<Progress> {
 
   List<LineChartBarData> bloodPressurePointData() {
     final LineChartBarData lineChartBarData1 = LineChartBarData(
-      spots: [
-        FlSpot(1, 110),
-        FlSpot(2, 120),
-        FlSpot(3, 130),
-        FlSpot(5, 105),
-        FlSpot(6, 120),
-        FlSpot(7, 113),
-        FlSpot(9, 120),
-      ],
+      spots: systolicPoints,
       isCurved: true,
       colors: [
         Colors.red.shade300,
@@ -231,15 +297,7 @@ class _ProgressState extends State<Progress> {
       ),
     );
     final LineChartBarData lineChartBarData2 = LineChartBarData(
-      spots: [
-        FlSpot(1, 80),
-        FlSpot(2, 85),
-        FlSpot(3, 95),
-        FlSpot(5, 105),
-        FlSpot(6, 85),
-        FlSpot(7, 80),
-        FlSpot(9, 82),
-      ],
+      spots: diastolicPoints,
       isCurved: true,
       colors: [
         Colors.blue.shade300,
@@ -341,15 +399,7 @@ class _ProgressState extends State<Progress> {
   List<LineChartBarData> weightPointData() {
     return [
       LineChartBarData(
-        spots: [
-          FlSpot(1, 110),
-          FlSpot(2, 112),
-          FlSpot(3, 115),
-          FlSpot(5, 120),
-          FlSpot(6, 130),
-          FlSpot(7, 142),
-          FlSpot(9, 155),
-        ],
+        spots: weightPoints,
         isCurved: true,
         curveSmoothness: 0,
         colors: [
@@ -376,20 +426,8 @@ class _InputButtonState extends State<InputButton> {
       /// both default to 16
       marginEnd: 18,
       marginBottom: 20,
-      // animatedIcon: AnimatedIcons.menu_close,
-      // animatedIconTheme: IconThemeData(size: 22.0),
-      /// This is ignored if animatedIcon is non null
       icon: Icons.add,
       activeIcon: Icons.remove,
-      // iconTheme: IconThemeData(color: Colors.grey[50], size: 30),
-
-      /// The label of the main button.
-      // label: Text("Open Speed Dial"),
-      /// The active label of the main button, Defaults to label if not specified.
-      // activeLabel: Text("Close Speed Dial"),
-      /// Transition Builder between label and activeLabel, defaults to FadeTransition.
-      // labelTransitionBuilder: (widget, animation) => ScaleTransition(scale: animation,child: widget),
-      /// The below button size defaults to 56 itself, its the FAB size + It also affects relative padding and other elements
       buttonSize: 56.0,
       visible: true,
 
@@ -407,10 +445,6 @@ class _InputButtonState extends State<InputButton> {
       foregroundColor: Colors.black,
       elevation: 8.0,
       shape: CircleBorder(),
-
-      // orientation: SpeedDialOrientation.Up,
-      // childMarginBottom: 2,
-      // childMarginTop: 2,
       children: [
         SpeedDialChild(
           child: Icon(Icons.favorite),
@@ -449,8 +483,10 @@ class _InputButtonState extends State<InputButton> {
 }
 
 class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
-  TextEditingController inputController = new TextEditingController();
-  String data = "";
+  TextEditingController systolicController = new TextEditingController();
+  TextEditingController diastolicController = new TextEditingController();
+  DateTime systolic_selected_date = DateTime.now();
+  DateTime diastolic_selected_date = DateTime.now();
 
   // find directory path
   Future<String> get _localPath async {
@@ -458,44 +494,58 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
     return directory.path;
   }
 
-  // find the local file
-  Future<File> get _localFile async {
+  // find the systolic file
+  Future<File> get _systolicFile async {
     final path = await _localPath;
-    return File('$path/blood_pressure_points.txt');
+    return File('$path/systolic_points.txt');
   }
 
-  Future<File> writeFile(String input) async {
-    final file = await _localFile;
+  // find the diastolic file
+  Future<File> get _diastolicFile async {
+    final path = await _localPath;
+    return File('$path/diastolic_points.txt');
+  }
+
+  // write systolic data
+  writeSystolic(date, systolic) async {
+    final systolic_file = await _systolicFile;
 
     // Write the file.
-    return file.writeAsString('$input');
+    systolic_file.writeAsString(date + " " + systolic + '\n',
+        mode: FileMode.append);
+
+    // Call to update the chart
+    _ProgressState temp = new _ProgressState();
+    temp.updateChart(systolic_file, "systolic");
   }
 
-  // Triggered after user input is completed
-  Future<int> readData() async {
-    try {
-      final file = await _localFile;
+  // write diastolic data
+  writeDiastolic(date, diastolic) async {
+    final diastolic_file = await _diastolicFile;
 
-      // Read the file.
-      String contents = await file.readAsString();
-      print("Contents: " + contents);
-      setState(() {
-        contents = data;
-      });
-      return int.parse(contents);
-    } catch (e) {
-      // If encountering an error, return 0.
-      return 0;
-    }
+    // Write the file.
+    diastolic_file.writeAsString(date + " " + diastolic + '\n',
+        mode: FileMode.append);
+
+    // Call to update the chart
+    _ProgressState temp = new _ProgressState();
+    temp.updateChart(diastolic_file, "diastolic");
   }
 
-  //update data file with user blood pressure data
-  setBloodPressure(user_input) async {
-    print("User val --> " + user_input);
-    writeFile(user_input);
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('blood_pressure', user_input);
-    readData();
+  //update data file with user systolic data
+  setSystolic(date, systolic) async {
+    writeSystolic(date, systolic);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home()),
+    );
+  }
+
+  //update data file with user diastolic data
+  setDiastolic(date, diastolic) async {
+    writeDiastolic(date, diastolic);
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Home()),
@@ -511,13 +561,44 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextField(
-                controller: inputController,
+                controller: systolicController,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
                 decoration: new InputDecoration(
                   border: new OutlineInputBorder(
                       borderSide: new BorderSide(color: Colors.white)),
-                  labelText: "Enter your blood pressure",
+                  labelText: "Systolic blood pressure",
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ], // Only numbers can be entered
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              new ElevatedButton(
+                  child: Text('Pick systolic measurement date'),
+                  onPressed: () {
+                    showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2050))
+                        .then((date) {
+                      setState(() {
+                        systolic_selected_date = date;
+                      });
+                    });
+                  }),
+              SizedBox(height: 30), // padding between the children
+              new TextField(
+                controller: diastolicController,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                decoration: new InputDecoration(
+                  border: new OutlineInputBorder(
+                      borderSide: new BorderSide(color: Colors.white)),
+                  labelText: "Diastolic blood pressure",
                   labelStyle: TextStyle(color: Colors.white),
                 ),
                 keyboardType: TextInputType.number,
@@ -526,13 +607,37 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
                 ], // Only numbers can be entered
               ),
               SizedBox(height: 30), // padding between the children
+              new ElevatedButton(
+                  child: Text('Pick diastolic measurement date'),
+                  onPressed: () {
+                    showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2050))
+                        .then((date) {
+                      setState(() {
+                        diastolic_selected_date = date;
+                      });
+                    });
+                  }),
               new TextButton.icon(
                 icon: Icon(Icons.check),
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
-                  setBloodPressure(inputController.text);
-                  inputController.clear();
+                  setSystolic(
+                      (systolic_selected_date.month +
+                              (systolic_selected_date.day / 31))
+                          .toString(),
+                      systolicController.text);
+                  setDiastolic(
+                      (diastolic_selected_date.month +
+                              (diastolic_selected_date.day / 31))
+                          .toString(),
+                      diastolicController.text);
+                  systolicController.clear();
+                  diastolicController.clear();
                 },
               ),
             ],
@@ -542,8 +647,9 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
 }
 
 class _UserInputWeightState extends State<UserInputWeight> {
-  TextEditingController inputController = new TextEditingController();
-  String data = "";
+  TextEditingController weightController = new TextEditingController();
+  TextEditingController dateController = new TextEditingController();
+  DateTime selected_date = DateTime.now();
 
   // find directory path
   Future<String> get _localPath async {
@@ -557,38 +663,22 @@ class _UserInputWeightState extends State<UserInputWeight> {
     return File('$path/weight_points.txt');
   }
 
-  Future<File> writeFile(String input) async {
-    final file = await _localFile;
+  writeFile(date, weight) async {
+    final weight_file = await _localFile;
 
     // Write the file.
-    return file.writeAsString('$input');
+    weight_file.writeAsString(date + " " + weight + '\n',
+        mode: FileMode.append);
+
+    // Call to update the chart
+    _ProgressState temp = new _ProgressState();
+    temp.updateChart(weight_file, "weight");
   }
 
-  // Triggered after user input is completed
-  Future<int> readData() async {
-    try {
-      final file = await _localFile;
+  //update data file with user weight data
+  setWeight(date, weight) async {
+    writeFile(date, weight);
 
-      // Read the file.
-      String contents = await file.readAsString();
-      print("Contents: " + contents);
-      setState(() {
-        contents = data;
-      });
-      return int.parse(contents);
-    } catch (e) {
-      // If encountering an error, return 0.
-      return 0;
-    }
-  }
-
-  //update data file with user blood pressure data
-  setBloodPressure(user_input) async {
-    print("User val --> " + user_input);
-    writeFile(user_input);
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('blood_pressure', user_input);
-    readData();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Home()),
@@ -604,7 +694,7 @@ class _UserInputWeightState extends State<UserInputWeight> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextField(
-                controller: inputController,
+                controller: weightController,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
                 decoration: new InputDecoration(
@@ -618,14 +708,31 @@ class _UserInputWeightState extends State<UserInputWeight> {
                   FilteringTextInputFormatter.digitsOnly
                 ], // Only numbers can be entered
               ),
+              new ElevatedButton(
+                  child: Text('Pick a date'),
+                  onPressed: () {
+                    showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2050))
+                        .then((date) {
+                      setState(() {
+                        selected_date = date;
+                      });
+                    });
+                  }),
               SizedBox(height: 30), // padding between the children
               new TextButton.icon(
                 icon: Icon(Icons.check),
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
-                  setBloodPressure(inputController.text);
-                  inputController.clear();
+                  setWeight(
+                      (selected_date.month + (selected_date.day / 31))
+                          .toString(),
+                      weightController.text);
+                  weightController.clear();
                 },
               ),
             ],
