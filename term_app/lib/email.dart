@@ -10,7 +10,8 @@ class NewEmail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primaryColor: Colors.red.shade900),
       home: EmailSender(),
     );
   }

@@ -27,6 +27,7 @@ class ProfileState extends State<Profile> {
     double c_height = MediaQuery.of(context).size.height * 0.07;
 
     return new Scaffold(
+        //backgroundColor: Colors.grey.shade400,
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
             child: Column(
@@ -85,8 +86,38 @@ class ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
+                    Container(padding: EdgeInsets.all(7)),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        color: Colors.red.shade900,
+                        padding: EdgeInsets.all(10.0),
+                        width: c_width * .5,
+                        height: c_height * .85,
+                        child: GestureDetector(
+                          onTap: () {
+                            FirebaseAuth.instance.sendPasswordResetEmail(
+                                email: user.email.toString());
+                            _showMyDialog(context);
+                          },
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Reset Password',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  //decoration: TextDecoration.underline,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     Container(
-                      padding: EdgeInsets.all(17),
+                      padding: EdgeInsets.all(15),
                     ),
                     Text(
                       'My Pregnancy Goals',
@@ -94,7 +125,7 @@ class ProfileState extends State<Profile> {
                       style: TextStyle(
                           color: Colors.grey[800],
                           decoration: TextDecoration.underline,
-                          fontSize: 26,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8.0),
@@ -150,4 +181,34 @@ class ProfileState extends State<Profile> {
                   ]))
             ])));
   }
+}
+
+Future<void> _showMyDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Email Confirmation'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Text(
+                  'An email to reset your password has been sent to the provided email address.'),
+              //Text('Would you like to approve of this message?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Confirm'),
+            onPressed: () {
+              //print('Confirmed');
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
