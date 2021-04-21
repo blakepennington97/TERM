@@ -221,12 +221,13 @@ Future<void> _showMyDialog(BuildContext context) async {
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('AlertDialog Title'),
+        title: Text('Email Confirmation'),
         content: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text('This is a demo alert dialog.'),
-              Text('Would you like to approve of this message?'),
+              Text(
+                  'An email to reset your password has been sent to the provided email address.'),
+              //Text('Would you like to approve of this message?'),
             ],
           ),
         ),
@@ -234,13 +235,7 @@ Future<void> _showMyDialog(BuildContext context) async {
           TextButton(
             child: Text('Confirm'),
             onPressed: () {
-              print('Confirmed');
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: Text('Cancel'),
-            onPressed: () {
+              //print('Confirmed');
               Navigator.of(context).pop();
             },
           ),

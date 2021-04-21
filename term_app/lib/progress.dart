@@ -154,7 +154,7 @@ class _ProgressState extends State<Progress> {
                     ),
                     new ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.red.shade300, // background
+                          primary: Colors.red.shade900, // background
                           onPrimary: Colors.white, // foreground
                         ),
                         child: Text('Save Screenshot'),
@@ -448,7 +448,7 @@ class _InputButtonState extends State<InputButton> {
       children: [
         SpeedDialChild(
           child: Icon(Icons.favorite),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red.shade900,
           label: 'Blood Pressure',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => Navigator.push(
@@ -475,10 +475,11 @@ class _InputButtonState extends State<InputButton> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-      body: Progress(),
-      floatingActionButton: buildSpeedDial(),
-    ));
+          body: Progress(),
+          floatingActionButton: buildSpeedDial(),
+        ));
   }
 }
 
