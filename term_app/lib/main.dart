@@ -14,9 +14,15 @@
 import 'package:flutter/material.dart';
 import 'package:term_app/home.dart';
 import 'signup.dart';
-import 'globals.dart' as globals;
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(new SignIn());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(new SignIn());
+}
 
 class SignIn extends StatelessWidget {
   @override
@@ -38,6 +44,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInState extends State<SignInPage> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController userEmail = new TextEditingController();
   TextEditingController userPassword = new TextEditingController();
 
@@ -46,6 +53,7 @@ class _SignInState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = auth.currentUser;
     return new Scaffold(
         resizeToAvoidBottomInset: false,
         body: Column(
@@ -96,41 +104,73 @@ class _SignInState extends State<SignInPage> {
                     Container(
                       alignment: Alignment(1.0, 0.0),
                       padding: EdgeInsets.only(top: 15.0, left: 20.0),
-                      child: InkWell(
-                        child: Text(
-                          'Forgot Password',
-                          style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat',
-                              decoration: TextDecoration.underline),
+                      child: GestureDetector(
+                        onTap: () {
+                          FirebaseAuth.instance.sendPasswordResetEmail(
+                              email: userEmail.text.toString());
+                          _showMyDialog(context);
+                        },
+                        child: InkWell(
+                          child: Text(
+                            'Forgot Password',
+                            style: TextStyle(
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat',
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 40.0),
                     Container(
                       height: 40.0,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20.0),
-                        shadowColor: Colors.grey[800],
-                        color: Colors.red.shade900,
-                        elevation: 7.0,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              (userEmail.text == globals.uEmail)
-                                  ? valEmail = false
-                                  : valEmail = true;
-                              ((userEmail.text == globals.uEmail) &&
-                                      (userPassword.text != globals.uPassword))
-                                  ? valPassword = true
-                                  : valPassword = false;
-                            });
-                            if ((userEmail.text == globals.uEmail) &&
-                                (userPassword.text == globals.uPassword)) {
+                      child: GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            (userEmail.text.toString() == user.email.toString())
+                                ? valEmail = false
+                                : valEmail = true;
+                            //((userEmail.text.toString() == globals.uEmail) &&
+                            //(userPassword.text.toString() !=
+                            //globals.uPassword))
+                            //? valPassword = true
+                            //: valPassword = false;
+                          });
+
+                          //String email = userEmail.text;
+                          //String password = userPassword.text;
+
+                          final _auth = FirebaseAuth.instance;
+
+                          try {
+                            if (userEmail.text == null) {}
+                            final newUser =
+                                await _auth.signInWithEmailAndPassword(
+                                    email: userEmail.text.toString(),
+                                    password: userPassword.text.toString());
+                            if (newUser != null) {
                               Navigator.of(context).pushNamed('/home');
                             }
-                          },
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              print('No user found for that email.');
+                            } else if (e.code == 'wrong-password') {
+                              print('Wrong password provided for that user.');
+                            }
+                          } catch (e) {
+                            return e;
+                          }
+                          //if ((userEmail.text == globals.uEmail) &&
+                          //(userPassword.text == globals.uPassword)) {
+                          //Navigator.of(context).pushNamed('/home');
+                          //}
+                        },
+                        child: Material(
+                          borderRadius: BorderRadius.circular(20.0),
+                          shadowColor: Colors.grey[800],
+                          color: Colors.red.shade900,
+                          elevation: 7.0,
                           child: Center(
                             child: Text(
                               'LOGIN',
@@ -149,15 +189,15 @@ class _SignInState extends State<SignInPage> {
             Container(
               height: 40.0,
               padding: EdgeInsets.only(right: 19.0, left: 19.0),
-              child: Material(
-                borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Colors.grey[800],
-                color: Colors.red.shade900,
-                elevation: 7.0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/signup');
-                  },
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/signup');
+                },
+                child: Material(
+                  borderRadius: BorderRadius.circular(20.0),
+                  shadowColor: Colors.grey[800],
+                  color: Colors.red.shade900,
+                  elevation: 7.0,
                   child: Center(
                     child: Text(
                       'CREATE PROFILE',
@@ -173,6 +213,41 @@ class _SignInState extends State<SignInPage> {
           ],
         ));
   }
+}
+
+Future<void> _showMyDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('AlertDialog Title'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Text('This is a demo alert dialog.'),
+              Text('Would you like to approve of this message?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Confirm'),
+            onPressed: () {
+              print('Confirmed');
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 // code cited: https://github.com/rajayogan/flutter-minimalloginUI/blob/master/lib/main.dart
