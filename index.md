@@ -36,3 +36,6 @@
 - Aleksandar Zubic
   - Email: azubic@crimson.ua.edu
 
+## Download the APK
+- You can find a link to download here --> [Link](https://drive.google.com/file/d/1ekszo42rH9VyZsSEebBrbPBXf6psRvgS/view?usp=sharing)
+
