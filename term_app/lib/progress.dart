@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/services.dart';
 import 'package:term_app/home.dart';
+import 'package:term_app/email.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:screenshot/screenshot.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class Progress extends StatefulWidget {
   @override
@@ -35,6 +39,9 @@ class _ProgressState extends State<Progress> {
   List<FlSpot> systolicPoints = [];
   List<FlSpot> diastolicPoints = [];
   List<FlSpot> weightPoints = [];
+  Uint8List _imageFile;
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void initState() {
@@ -64,6 +71,17 @@ class _ProgressState extends State<Progress> {
         if (chart_name == "diastolic") {
           diastolicPoints.add(FlSpot(x_val, y_val));
         }
+      }
+      if (chart_name == "weight") {
+        weightPoints.sort((a, b) => (a.x).compareTo((b.x)));
+        print("SORTED POINTS: ");
+        print(weightPoints);
+      }
+      if (chart_name == "systolic") {
+        //systolicPoints.add(FlSpot(x_val, y_val));
+      }
+      if (chart_name == "diastolic") {
+        //diastolicPoints.add(FlSpot(x_val, y_val));
       }
     });
   }
@@ -97,39 +115,67 @@ class _ProgressState extends State<Progress> {
         ),
         child: Stack(
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const SizedBox(
-                  height: 37,
-                ),
-                const Text(
-                  'Weight & Blood Pressure',
-                  style: TextStyle(
-                    color: Color(0xff827daa),
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
-                  height: 37,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 6.0),
-                    child: LineChart(
-                      isShowingMainData ? bloodPressureData() : weightData(),
-                      swapAnimationDuration: const Duration(milliseconds: 250),
+            Screenshot(
+              controller: screenshotController,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 37,
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
+                    const Text(
+                      'Weight & Blood Pressure',
+                      style: TextStyle(
+                        color: Color(0xff827daa),
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    const SizedBox(
+                      height: 37,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16.0, left: 6.0),
+                        child: LineChart(
+                          isShowingMainData
+                              ? bloodPressureData()
+                              : weightData(),
+                          swapAnimationDuration:
+                              const Duration(milliseconds: 250),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    new ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red.shade300, // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        child: Text('Save Screenshot'),
+                        onPressed: () {
+                          screenshotController
+                              .capture()
+                              .then((Uint8List image) async {
+                            setState(() {
+                              _imageFile = image;
+                            });
+                            final result =
+                                await ImageGallerySaver.saveImage(image);
+                            print("Image saved to gallery.");
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => EmailSender()),
+                            // );
+                          });
+                        })
+                  ]),
             ),
             IconButton(
               icon: Icon(
@@ -543,7 +589,7 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
                         systolic_selected_date = date;
                       });
                     });
-              }),
+                  }),
               SizedBox(height: 30), // padding between the children
               new TextField(
                 controller: diastolicController,
@@ -574,16 +620,22 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
                         diastolic_selected_date = date;
                       });
                     });
-              }),
+                  }),
               new TextButton.icon(
                 icon: Icon(Icons.check),
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
-                  setSystolic((systolic_selected_date.month + (systolic_selected_date.day / 31))
-                          .toString(), systolicController.text);
-                  setDiastolic((diastolic_selected_date.month + (diastolic_selected_date.day / 31))
-                          .toString(), diastolicController.text);
+                  setSystolic(
+                      (systolic_selected_date.month +
+                              (systolic_selected_date.day / 31))
+                          .toString(),
+                      systolicController.text);
+                  setDiastolic(
+                      (diastolic_selected_date.month +
+                              (diastolic_selected_date.day / 31))
+                          .toString(),
+                      diastolicController.text);
                   systolicController.clear();
                   diastolicController.clear();
                 },
@@ -669,7 +721,7 @@ class _UserInputWeightState extends State<UserInputWeight> {
                         selected_date = date;
                       });
                     });
-              }),
+                  }),
               SizedBox(height: 30), // padding between the children
               new TextButton.icon(
                 icon: Icon(Icons.check),
