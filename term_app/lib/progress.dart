@@ -33,7 +33,7 @@ class UserInputWeight extends StatefulWidget {
 class _ProgressState extends State<Progress> {
   bool isShowingMainData = true;
   String mainTitle = 'Blood Pressure';
-  int? data = 0;
+  int data = 0;
   List<FlSpot> bloodPressurePoints = [];
   List<FlSpot> weightPoints = [];
 

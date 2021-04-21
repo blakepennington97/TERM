@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'globals.dart' as globals;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -8,8 +8,8 @@ class Profile extends StatefulWidget {
 
 class ProfileState extends State<Profile> {
   bool isShowingMainData = true;
-  var nameStr = 'Name: ' + globals.uFirst + ' ' + globals.uLast;
-  var emailStr = 'Email: ' + globals.uEmail;
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -19,6 +19,13 @@ class ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = auth.currentUser;
+    String emailStr = 'Email: ' + user.email;
+    String nameStr = 'Name: ' + user.displayName;
+
+    double c_width = MediaQuery.of(context).size.width * 0.95;
+    double c_height = MediaQuery.of(context).size.height * 0.07;
+
     return new Scaffold(
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
@@ -31,37 +38,55 @@ class ProfileState extends State<Profile> {
               Container(
                   alignment: Alignment.topCenter,
                   padding: EdgeInsets.only(
-                      top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
+                      top: 15.0, bottom: 15.0, left: 15.0, right: 15.0),
                   child: Column(children: <Widget>[
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        child: Text(
-                          nameStr,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.grey[800],
-                              //decoration: TextDecoration.underline,
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold),
+                      child: Container(
+                        color: Colors.red.shade900,
+                        padding: EdgeInsets.all(10),
+                        width: c_width,
+                        height: c_height,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            nameStr,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.grey.shade100,
+                                //decoration: TextDecoration.underline,
+                                //fontSize: 26,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
+                    Container(padding: EdgeInsets.all(7)),
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10.0, bottom: 40.0),
-                        child: Text(
-                          emailStr,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.grey[800],
-                              //decoration: TextDecoration.underline,
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold),
+                      child: Container(
+                        color: Colors.red.shade900,
+                        padding: EdgeInsets.all(10.0),
+                        width: c_width,
+                        height: c_height,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            emailStr,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.grey.shade100,
+                                //decoration: TextDecoration.underline,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(17),
                     ),
                     Text(
                       'My Pregnancy Goals',

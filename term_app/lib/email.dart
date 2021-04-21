@@ -17,7 +17,7 @@ class NewEmail extends StatelessWidget {
 }
 
 class EmailSender extends StatefulWidget {
-  const EmailSender({Key? key}) : super(key: key);
+  const EmailSender({Key key}) : super(key: key);
 
   @override
   _EmailSenderState createState() => _EmailSenderState();
@@ -161,7 +161,7 @@ class _EmailSenderState extends State<EmailSender> {
 
   void _openImagePicker() async {
     final picker = ImagePicker();
-    PickedFile? pick = await picker.getImage(source: ImageSource.gallery);
+    PickedFile pick = await picker.getImage(source: ImageSource.gallery);
     if (pick != null) {
       setState(() {
         attachments.add(pick.path);
