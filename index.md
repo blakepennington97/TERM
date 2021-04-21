@@ -36,6 +36,10 @@
 - Aleksandar Zubic
   - Email: azubic@crimson.ua.edu
 
+## Video Demonstration
+[![Final Presentation](http://img.youtube.com/vi/94bQCsPw5rg/0.jpg)](https://www.youtube.com/watch?v=94bQCsPw5rg "TERM Final Presentation")
+
+
 ## Download the APK
 - You can find a link to download here --> [Link](https://drive.google.com/file/d/1ekszo42rH9VyZsSEebBrbPBXf6psRvgS/view?usp=sharing)
 
