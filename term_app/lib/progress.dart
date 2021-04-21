@@ -595,7 +595,8 @@ class _UserInputWeightState extends State<UserInputWeight> {
     final weight_file = await _localFile;
 
     // Write the file.
-    weight_file.writeAsString(date + " " + weight + '\n', mode: FileMode.append);
+    weight_file.writeAsString(date + " " + weight + '\n',
+        mode: FileMode.append);
     // Read the file.
     weight_file.readAsString().then((String contents) {
       print(contents);
@@ -622,7 +623,7 @@ class _UserInputWeightState extends State<UserInputWeight> {
 
   //update data file with user weight data
   setWeight(date, weight) async {
-    globals.weight_data.add(weight.toString());
+    // globals.weight_data.add(weight.toString());
     // print(date);
     // print("User weight data--> ");
     // print(globals.weight_data);
@@ -684,7 +685,10 @@ class _UserInputWeightState extends State<UserInputWeight> {
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
-                  setWeight(selected_date.toString(), weightController.text);
+                  setWeight(
+                      (selected_date.month + (selected_date.day / 31))
+                          .toString(),
+                      weightController.text);
                   weightController.clear();
                 },
               ),
