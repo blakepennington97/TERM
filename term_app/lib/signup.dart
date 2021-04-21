@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'globals.dart' as globals;
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -96,7 +97,7 @@ class _SignupPageState extends State<SignupPage> {
                             color: Colors.red.shade900,
                             elevation: 7.0,
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 setState(() {
                                   userFirst.text.isEmpty
                                       ? valFirst = true
@@ -111,12 +112,33 @@ class _SignupPageState extends State<SignupPage> {
                                       ? valPassword = true
                                       : valPassword = false;
                                 });
-                                globals.uFirst = userFirst.text;
-                                globals.uLast = userLast.text;
-                                globals.uEmail = userEmail.text;
-                                globals.uPassword = userPassword.text;
 
-                                Navigator.of(context).pop();
+                                //String email = userEmail.text;
+                                //String password = userEmail.text;
+
+                                //FirebaseAuth _auth = FirebaseAuth.instance;
+
+                                try {
+                                  await FirebaseAuth.instance
+                                      .createUserWithEmailAndPassword(
+                                    email: userEmail.text.toString(),
+                                    password: userPassword.text.toString(),
+                                  );
+
+                                  await FirebaseAuth.instance.currentUser
+                                      .updateProfile(
+                                          displayName:
+                                              (userFirst.text.toString() +
+                                                  ' ' +
+                                                  userLast.text.toString()));
+                                  //if (newUser != null) {
+                                  Navigator.of(context).pop();
+                                  //}
+                                } catch (e) {
+                                  print(e);
+                                }
+
+                                //Navigator.of(context).pop();
                               },
                               child: Center(
                                 child: Text(
