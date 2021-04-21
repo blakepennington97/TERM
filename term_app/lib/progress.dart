@@ -7,7 +7,6 @@ import 'package:term_app/home.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
-import 'globals.dart' as globals;
 
 class Progress extends StatefulWidget {
   @override
@@ -34,7 +33,8 @@ class _ProgressState extends State<Progress> {
   bool isShowingMainData = true;
   String mainTitle = 'Blood Pressure';
   int data = 0;
-  List<FlSpot> bloodPressurePoints = [];
+  List<FlSpot> systolicPoints = [];
+  List<FlSpot> diastolicPoints = [];
   List<FlSpot> weightPoints = [];
 
   @override
@@ -42,14 +42,44 @@ class _ProgressState extends State<Progress> {
     super.initState();
     isShowingMainData = true;
     InputButton();
-    getData();
+    updateAllCharts();
   }
 
-  getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      data = prefs.getInt('blood_pressure');
+  updateChart(file, chart_name) {
+    weightPoints.clear();
+    systolicPoints.clear();
+    diastolicPoints.clear();
+    // Read the file and update the line chart data
+    file.readAsString().then((String contents) {
+      print(contents);
+      List<String> lines = contents.split('\n');
+      for (var i = 0; i <= lines.length; i++) {
+        double x_val = double.parse(lines[i].split(' ')[0]);
+        double y_val = double.parse(lines[i].split(' ')[1]);
+        if (chart_name == "weight") {
+          print(x_val);
+          print(y_val);
+          weightPoints.add(FlSpot(x_val, y_val));
+        }
+        if (chart_name == "systolic") {
+          systolicPoints.add(FlSpot(x_val, y_val));
+        }
+        if (chart_name == "diastolic") {
+          diastolicPoints.add(FlSpot(x_val, y_val));
+        }
+      }
     });
+  }
+
+  updateAllCharts() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final weight_file = File('$path/weight_points.txt');
+    // final diastolic_file = File('$path/diastolic_points.txt');
+    // final systolic_file = File('$path/systolic_points.txt');
+    updateChart(weight_file, "weight");
+    // updateChart(diastolic_file, "diastolic");
+    // updateChart(systolic_file, "systolic");
   }
 
   @override
@@ -209,15 +239,7 @@ class _ProgressState extends State<Progress> {
 
   List<LineChartBarData> bloodPressurePointData() {
     final LineChartBarData lineChartBarData1 = LineChartBarData(
-      spots: [
-        FlSpot(1, 110),
-        FlSpot(2, 120),
-        FlSpot(3, 130),
-        FlSpot(5, 105),
-        FlSpot(6, 120),
-        FlSpot(7, 113),
-        FlSpot(9, 120),
-      ],
+      spots: systolicPoints,
       isCurved: true,
       colors: [
         Colors.red.shade300,
@@ -232,15 +254,7 @@ class _ProgressState extends State<Progress> {
       ),
     );
     final LineChartBarData lineChartBarData2 = LineChartBarData(
-      spots: [
-        FlSpot(1, 80),
-        FlSpot(2, 85),
-        FlSpot(3, 95),
-        FlSpot(5, 105),
-        FlSpot(6, 85),
-        FlSpot(7, 80),
-        FlSpot(9, 82),
-      ],
+      spots: diastolicPoints,
       isCurved: true,
       colors: [
         Colors.blue.shade300,
@@ -342,15 +356,7 @@ class _ProgressState extends State<Progress> {
   List<LineChartBarData> weightPointData() {
     return [
       LineChartBarData(
-        spots: [
-          FlSpot(1, 110),
-          FlSpot(2, 112),
-          FlSpot(3, 115),
-          FlSpot(5, 120),
-          FlSpot(6, 130),
-          FlSpot(7, 142),
-          FlSpot(9, 155),
-        ],
+        spots: weightPoints,
         isCurved: true,
         curveSmoothness: 0,
         colors: [
@@ -597,44 +603,15 @@ class _UserInputWeightState extends State<UserInputWeight> {
     // Write the file.
     weight_file.writeAsString(date + " " + weight + '\n',
         mode: FileMode.append);
-    // Read the file.
-    weight_file.readAsString().then((String contents) {
-      print(contents);
-    });
+
+    // Call to update the chart
+    _ProgressState temp = new _ProgressState();
+    temp.updateChart(weight_file, "weight");
   }
-
-  // // Triggered after user input is completed
-  // Future<int> readData() async {
-  //   try {
-  //     final file = await _localFile;
-
-  //     // Read the file.
-  //     String contents = await file.readAsString();
-  //     print("Contents: " + contents);
-  //     setState(() {
-  //       contents = data;
-  //     });
-  //     return int.parse(contents);
-  //   } catch (e) {
-  //     // If encountering an error, return 0.
-  //     return 0;
-  //   }
-  // }
 
   //update data file with user weight data
   setWeight(date, weight) async {
-    // globals.weight_data.add(weight.toString());
-    // print(date);
-    // print("User weight data--> ");
-    // print(globals.weight_data);
     writeFile(date, weight);
-    //readData();
-    // save data
-    // final prefs = await SharedPreferences.getInstance();
-    // prefs.setStringList('weight', globals.weight_data);
-    // // Try reading data from the counter key. If it doesn't exist, return 0.
-    // final data = prefs.getStringList('weight') ?? 0;
-    // print(data);
 
     Navigator.push(
       context,
@@ -675,7 +652,7 @@ class _UserInputWeightState extends State<UserInputWeight> {
                             lastDate: DateTime(2050))
                         .then((date) {
                       setState(() {
-                        selected_date = date!;
+                        selected_date = date;
                       });
                     });
                   }),
