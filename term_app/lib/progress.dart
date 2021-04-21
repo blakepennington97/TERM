@@ -7,6 +7,7 @@ import 'package:term_app/home.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
+import 'globals.dart' as globals;
 
 class Progress extends StatefulWidget {
   @override
@@ -491,9 +492,22 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
   }
 
   //update data file with user blood pressure data
-  setBloodPressure(user_input) async {
-    print("User val --> " + user_input);
-    writeFile(user_input);
+  setSystolic(user_systolic_data) async {
+    print("User systolic --> " + user_systolic_data);
+    writeFile(user_systolic_data);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('systolic', user_systolic_data);
+    readData();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home()),
+    );
+  }
+
+  //update data file with user blood pressure data
+  setDiastolic(user_diastolic_data) async {
+    print("User diastolic --> " + user_diastolic_data);
+    writeFile(user_diastolic_data);
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.setInt('blood_pressure', user_input);
     readData();
@@ -548,7 +562,8 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
-                  setBloodPressure(inputController.text);
+                  setSystolic(inputController.text);
+                  setDiastolic(inputController2.text);
                   inputController.clear();
                   inputController2.clear();
                 },
@@ -560,9 +575,9 @@ class _UserInputBloodPressureState extends State<UserInputBloodPressure> {
 }
 
 class _UserInputWeightState extends State<UserInputWeight> {
-  TextEditingController inputController = new TextEditingController();
-  TextEditingController inputController2 = new TextEditingController();
-  String data = "";
+  TextEditingController weightController = new TextEditingController();
+  TextEditingController dateController = new TextEditingController();
+  DateTime selected_date = DateTime.now();
 
   // find directory path
   Future<String> get _localPath async {
@@ -576,38 +591,50 @@ class _UserInputWeightState extends State<UserInputWeight> {
     return File('$path/weight_points.txt');
   }
 
-  Future<File> writeFile(String input) async {
-    final file = await _localFile;
+  writeFile(date, weight) async {
+    final weight_file = await _localFile;
 
     // Write the file.
-    return file.writeAsString('$input');
+    weight_file.writeAsString(date + " " + weight + '\n', mode: FileMode.append);
+    // Read the file.
+    weight_file.readAsString().then((String contents) {
+      print(contents);
+    });
   }
 
-  // Triggered after user input is completed
-  Future<int> readData() async {
-    try {
-      final file = await _localFile;
+  // // Triggered after user input is completed
+  // Future<int> readData() async {
+  //   try {
+  //     final file = await _localFile;
 
-      // Read the file.
-      String contents = await file.readAsString();
-      print("Contents: " + contents);
-      setState(() {
-        contents = data;
-      });
-      return int.parse(contents);
-    } catch (e) {
-      // If encountering an error, return 0.
-      return 0;
-    }
-  }
+  //     // Read the file.
+  //     String contents = await file.readAsString();
+  //     print("Contents: " + contents);
+  //     setState(() {
+  //       contents = data;
+  //     });
+  //     return int.parse(contents);
+  //   } catch (e) {
+  //     // If encountering an error, return 0.
+  //     return 0;
+  //   }
+  // }
 
-  //update data file with user blood pressure data
-  setBloodPressure(blood_pressure) async {
-    print("User val --> " + blood_pressure);
-    writeFile(blood_pressure);
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('blood_pressure', user_input);
-    readData();
+  //update data file with user weight data
+  setWeight(date, weight) async {
+    globals.weight_data.add(weight.toString());
+    // print(date);
+    // print("User weight data--> ");
+    // print(globals.weight_data);
+    writeFile(date, weight);
+    //readData();
+    // save data
+    // final prefs = await SharedPreferences.getInstance();
+    // prefs.setStringList('weight', globals.weight_data);
+    // // Try reading data from the counter key. If it doesn't exist, return 0.
+    // final data = prefs.getStringList('weight') ?? 0;
+    // print(data);
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Home()),
@@ -623,7 +650,7 @@ class _UserInputWeightState extends State<UserInputWeight> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextField(
-                controller: inputController,
+                controller: weightController,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
                 decoration: new InputDecoration(
@@ -637,14 +664,28 @@ class _UserInputWeightState extends State<UserInputWeight> {
                   FilteringTextInputFormatter.digitsOnly
                 ], // Only numbers can be entered
               ),
+              new ElevatedButton(
+                  child: Text('Pick a date'),
+                  onPressed: () {
+                    showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2050))
+                        .then((date) {
+                      setState(() {
+                        selected_date = date!;
+                      });
+                    });
+                  }),
               SizedBox(height: 30), // padding between the children
               new TextButton.icon(
                 icon: Icon(Icons.check),
                 label: Text(''),
                 onPressed: () {
                   // save value and return to Progress
-                  setBloodPressure(inputController.text);
-                  inputController.clear();
+                  setWeight(selected_date.toString(), weightController.text);
+                  weightController.clear();
                 },
               ),
             ],
